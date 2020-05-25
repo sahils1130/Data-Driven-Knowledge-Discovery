@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590168823799.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E8B44A20",
+    "lastKnownWriteTime" : 2308706370263003448,
+    "last_content_update" : 1590168823799,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "3F979A6A",
+        "caption" : "College",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=College&cache_key=3F979A6A",
+        "displayedObservations" : "777",
+        "environment" : "",
+        "expression" : "College",
+        "object" : "College",
+        "preview" : "0",
+        "totalObservations" : "777",
+        "variables" : "20"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

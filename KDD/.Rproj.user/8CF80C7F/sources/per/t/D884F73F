@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590159374439.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "597494310",
+    "id" : "D884F73F",
+    "lastKnownWriteTime" : 1590372720,
+    "last_content_update" : 1590372720313,
+    "path" : "~/GitHub/Data-Driven-Knowledge-Discovery/KDD/2dot4dot8.r",
+    "project_path" : "2dot4dot8.r",
+    "properties" : {
+        "cursorPosition" : "102,0",
+        "scrollLine" : "89",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,2 @@
+"0","attach(college)"
+"0","plot(Outstate~Private, data=College, xlab = ""Private"", ylab = ""Outstate"")"
