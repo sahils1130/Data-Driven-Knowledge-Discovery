@@ -1,8 +1,11 @@
 ---
-title: "i.Exercise2.4.8.Rmd"
-author: "Kaarthik, Sahil and Vidhi"
+title: "i.Exercise2.4.8"
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
 date: "5/24/2020"
-output: pdf_document
+output: 
+  pdf_document:
+    latex_engine: xelatex
+
 header~include:
   \usepackage{float}
   \usepackage{booktabs}
@@ -42,15 +45,15 @@ library(knitr)
 library(kableExtra)
 kable(head(college), format = "latex", booktabs=T) %>%
   kable_styling(latex_options="scale_down")
-# head(college)
-# library()
 ```
+
 (c) i. Use the `summary()` function to produce a numerical summary
 of the variables in the data set.
 
 ```{r partc1}
 summary(college)
 ```
+
 (c) ii. Use the `pairs()` function to produce a scatterplot matrix of
 the first ten columns or variables of the data. Recall that
 you can reference the first ten columns of a matrix A using
@@ -106,3 +109,16 @@ table(Private, Elite)
 library(gmodels)
 CrossTable(Private, Elite)
 ```
+
+The following table describes the matrix in which it holds the colleges which are in the Elite or the Private variable. The table shows the information about how many colleges are in the Elite section with yes or no and how many are in Private. 
+
+```{r plot}
+par(mfrow = c(1,2))
+plot(college$F.Undergrad, college$Enroll)
+plot(college$Accept, college$F.Undergrad)
+```
+
+According to the scatter plot from the **College** dataset it is really hard to find the correlation between the variables. Although we can find the strong relation between the F.undergrad and Enrollment in the colleges section. Also there is strong relation in the acceptance of the students which are undergraduates.
+
+
+

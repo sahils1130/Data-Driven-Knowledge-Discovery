@@ -1,0 +1,4 @@
+"0","#fix(college)"
+"0","rownames ( college )= college [,1]"
+"0","college = college [,-1]"
+"0","fix ( college )"

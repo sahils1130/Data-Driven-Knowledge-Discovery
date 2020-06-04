@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1590786019596.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1018018092",
+    "id" : "18145576",
+    "lastKnownWriteTime" : 1590785920,
+    "last_content_update" : 1590860275046,
+    "path" : "C:/Users/Sahil Shah/Downloads/exercise2dot4dot9.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "68,27",
+        "scrollLine" : "42"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

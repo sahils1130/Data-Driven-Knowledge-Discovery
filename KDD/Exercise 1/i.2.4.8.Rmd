@@ -1,0 +1,115 @@
+---
+title: "i.Exercise2.4.8"
+author: "Kaarthik, Sahil and Vidhi"
+date: "5/24/2020"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+
+header~include:
+  \usepackage{float}
+  \usepackage{booktabs}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This exercise relates to the **College** data set, which can be found in
+the file **College.csv**. It contains a number of variables for 777 different
+universities and colleges in the US.
+
+(a) Use the `read.csv()` function to read the data into R. Call the
+loaded data college. Make sure that you have the directory set
+to the correct location for the data.
+
+```{r parta}
+getwd()
+college <- read.csv("College.csv")
+```
+
+(b) Look at the data using the `fix()` function. You should notice
+that the first column is just the name of each university. We don’t
+really want R to treat this as data. However, it may be handy to
+have these names for later. Try the following commands:
+
+```{r partb1}
+#fix(college)
+rownames ( college )= college [,1]
+college = college [,-1]
+##fix ( college )
+```
+
+```{r partb2}
+library(knitr)
+library(kableExtra)
+kable(head(college), format = "latex", booktabs=T) %>%
+  kable_styling(latex_options="scale_down")
+# head(college)
+# library()
+```
+
+(c) i. Use the `summary()` function to produce a numerical summary
+of the variables in the data set.
+
+```{r partc1}
+summary(college)
+```
+
+(c) ii. Use the `pairs()` function to produce a scatterplot matrix of
+the first ten columns or variables of the data. Recall that
+you can reference the first ten columns of a matrix A using
+A[,1:10].
+
+```{r partc2}
+pairs(college[,1:10])
+```
+
+(c) iii. Use the `plot()` function to produce side-by-side boxplots of
+Outstate versus Private
+
+```{r partc3}
+attach(college)
+plot(Outstate~Private, data=college, xlab = "Private", ylab = "Outstate")
+```
+
+(c) iv. Create a new qualitative variable, called Elite, by binning
+the Top10perc variable. We are going to divide universities
+into two groups based on whether or not the proportion
+of students coming from the top 10 % of their high school
+classes exceeds 50 %.
+
+```{r partc4}
+Elite = rep("No", nrow(college))
+Elite[Top10perc>50] = "Yes"
+#Elite
+Elite = as.factor(Elite)
+college = data.frame(college, Elite)
+summary(college)
+plot(Outstate~Elite, xlab = "Elite", ylab = "Outstate")
+```
+
+(c) v. Use the `hist()` function to produce some histograms with
+differing numbers of bins for a few of the quantitative variables. You may find the command `par(mfrow=c(2,2))` useful:
+it will divide the print window into four regions so that four
+plots can be made simultaneously. Modifying the arguments
+to this function will divide the screen in other ways.
+
+```{r partc5}
+par(mfrow=c(2,2))
+hist(Apps, breaks=50, xlim=c(0,25000), main="Apps")
+hist(Enroll, breaks = 25, main = "Enroll")
+hist(Expend, breaks = 25, main = "Expend")
+hist(Outstate, breaks = 25, main = "Outstate")
+```
+
+(c) vi. Continue exploring the data, and provide a brief summary
+of what you discover.
+
+```{r partc6}
+table(Private, Elite)
+library(gmodels)
+CrossTable(Private, Elite)
+```
+
+According to the scatter plot from the **College** dataset, it is really hard to find the correlation in the small screen as the laptop. Although we can zoom in and find the relationship between the variables or plot the single graph with providing two variables as x and y using the `plot` function. From the variable Elite that we created that only hold the top 10 percent more than 50 as in yes. From the table shown above it generates the confusion matrix between the Elite and Private University.
