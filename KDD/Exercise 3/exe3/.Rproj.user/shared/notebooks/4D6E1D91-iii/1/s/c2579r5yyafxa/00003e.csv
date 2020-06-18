@@ -1,0 +1,2 @@
+"0","boxplot(mpg01, cylinders, main = ""cylinders Vs mpg01"", "
+"0","        xlab = ""mpg efficiency"", ylab = ""cyclinders"")"

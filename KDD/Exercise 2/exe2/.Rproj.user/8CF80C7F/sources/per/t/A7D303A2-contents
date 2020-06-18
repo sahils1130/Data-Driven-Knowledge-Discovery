@@ -11,7 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-This question involves the use of **multiple linear regression** on the
+This question involves the use of **Multiple Linear Regression** on the
 **Auto** data set.
 
 ```{r data}
@@ -50,16 +50,16 @@ summary(fit.lm)
 
 (c) i. Is there a relationship between the predictors and the response?
 
-Ans. Yes, there is a relationship between the predictors and the response variables. The F-Statistics is really far from 1, which results into small p-value. Indicating that there is an evidence against the null hypothesis.
+Yes, there is a relationship between the predictors and the response variables. The F-Statistics is really far from 1, which results into small p-value. Indicating that there is an evidence against the null hypothesis.
 
 (c) ii. Which predictors appear to have a statistically significant
 relationship to the response?
 
-Ans. Predictors like `origin`, `year`, `weight` and `displacement` have the statistically significant relationship with the response variable.
+Predictors like **origin**, **year**, **weight** and **displacement** have the statistically significant relationship with the response variable.
 
 (c) iii. What does the coefficient for the year variable suggest?
 
-Ans. The coefficient for the `year` i.e. 0.75 with the additional year of the car's age, the `mpg` will on average increase by 0.75. In other words it suggests that later model year car will have better `mpg`.
+Ans. The coefficient for the **year** i.e. 0.75 with the additional year of the car's age, the **mpg** will on average increase by 0.75. In other words it suggests that later model year car will have better **mpg**.
 
 (d) Use the `plot()` function to produce diagnostic plots of the linear
 regression fit. Comment on any problems you see with the fit.
@@ -72,28 +72,49 @@ par(mfrow = c(2,2))
 plot(fit.lm)
 ```
 
-Ans. There is an evidence of the non-linearity. The polt of Residuals vs Fitted shows that variance of the error terms increase with the values of the response. The Residuals vs Leverage plot shows no outliers, but the tending of the curve at point 14 shows the sign of high leverage.
+There is an evidence of the non-linearity. The plot of Residuals vs Fitted shows that variance of the error terms increase with the values of the response. The Residuals vs Leverage plot shows no outliers, while the high leverage point exists(i.e. 14).
 
 (e) Use the `*` and `:` symbols to fit linear regression models with
 interaction effects. Do any interactions appear to be statistically
 significant?
 
 ```{r parte}
-lm.fit1 <- lm(mpg ~ .-name + cylinders:horsepower, data = Auto)
-lm.fit2 <- lm(mpg~displacement+origin+year*weight, data = Auto)
-lm.fit3 <- lm(mpg~year+origin+displacement*weight, data = Auto)
-lm.fit4 <- lm(mpg~cylinders*displacement+displacement*weight, data = Auto)
+lm.fit1 <- lm(mpg~cylinders*displacement+displacement*weight, data = Auto)
 summary(lm.fit1)
+lm.fit2 <- lm(mpg ~.-name+displacement:weight, data = Auto)
 summary(lm.fit2)
+lm.fit3 <- lm(mpg~year+origin+displacement*weight, data = Auto)
 summary(lm.fit3)
-summary(lm.fit4)
 ```
 
-Ans. As seen in question (c) part (ii) there are **4** variables that are statistically significant, We are try the significant interactions. There is statistic significance in four of the lm.fit. There is a high correlated pairs in the lm.fit4 looking at the p-value, there is a strong statistical significance between displacement and weight, and there is none between cylinders and displacement.
+From all the above models, the 2nd model has more no. of variables being significant. The R-squared statistics estimates that 86% of the changes in the response can be explained by this particular set of predictors.
 
 (f) Try a few different transformations of the variables, such as
-log(X), √X, X2. Comment on your findings.
+log(X), √X, X^2. Comment on your findings.
 
 ```{r partf}
-
+lm.fit5 = lm(mpg~log(weight)+sqrt(horsepower)+acceleration+I(acceleration^2), data = Auto)
+summary(lm.fit5)
 ```
+
+log(weight), sqrt(horsepower) and accelaration^2 have an evidence of statistical significance from the p-values. 
+
+```{r partf1}
+par(mfrow=c(2,2))
+plot(lm.fit5)
+```
+
+```{r partf12}
+plot(predict(lm.fit5), rstudent(lm.fit5))
+```
+
+In the residual plot there is less notable pattern than the plot of linear regression terms. The standardized residuals shows the outliers more than 3. In the residuals vs leverage plot indicates there are more than 3 points with the high leverage. However, the Q-Q plot shows there is abnormality of the residuals.
+
+```{r partf2}
+lm.fit6<-lm(log(mpg)~cylinders+displacement+horsepower+weight+acceleration+year+origin,
+            data=Auto)
+summary(lm.fit6)
+plot(predict(lm.fit6), rstudent(lm.fit6))
+```
+
+Displacement, Horsepower and Weight gives the evidence of non-linear pattern with respect to the mpg. This pattern is nearly close to the log from of mpg. The results shows the better transformation of mpg that graph tends better than model fitting i.e. having good R^2.

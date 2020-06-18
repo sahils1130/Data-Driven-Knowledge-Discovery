@@ -1,0 +1,1 @@
+"0","plot(predict(lm.fit5), rstudent(lm.fit5))"

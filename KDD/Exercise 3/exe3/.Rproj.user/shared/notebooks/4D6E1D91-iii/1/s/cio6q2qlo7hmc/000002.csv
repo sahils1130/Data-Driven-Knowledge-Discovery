@@ -1,0 +1,5 @@
+"0","require(ISLR)"
+"2","Loading required package: ISLR
+"
+"0","data(Auto)"
+"0","attach(Auto)"

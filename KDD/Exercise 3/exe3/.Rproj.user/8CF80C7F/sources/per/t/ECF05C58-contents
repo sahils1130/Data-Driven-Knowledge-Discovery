@@ -1,0 +1,167 @@
+---
+title: "iii.Exercise 4.7.11"
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "6/13/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this problem, you will develop a model to predict whether a given
+car gets high or low gas mileage based on the Auto data set.
+
+```{r data}
+require(ISLR)
+data(Auto)
+attach(Auto)
+```
+
+(a) Create a binary variable, **mpg01**, that contains a 1 if **mpg** contains
+a value above its median, and a 0 if **mpg** contains a value below
+its median. You can compute the median using the `median()`
+function. Note you may find it helpful to use the `data.frame()`
+function to create a single data set containing both **mpg01** and
+the other **Auto** variables.
+
+```{r parta}
+mpg01 = rep(0, length(mpg))
+mpg01[mpg > median(mpg)] = 1
+myAuto = data.frame(Auto, mpg01)
+summary(myAuto)
+```
+
+(b) Explore the data graphically in order to investigate the association between **mpg01** and the other features. Which of the other features seem most likely to be useful in predicting **mpg01**? Scatterplots and boxplots may be useful tools to answer this question. Describe your findings.
+
+```{r partb}
+pairs(myAuto)
+sapply(myAuto, class)
+cor(myAuto[-9])
+#par(mfrow = c(2,2))
+boxplot(mpg01, cylinders, main = "cylinders Vs mpg01", 
+        xlab = "mpg efficiency", ylab = "cyclinders")
+boxplot(mpg01, displacement, main = "displacement Vs mpg01",
+        xlab = "mpg efficiency", ylab = "displacement")
+boxplot(mpg01, horsepower, main = "horsepower Vs mpg01",
+        xlab = "mpg efficiency", ylab = "horsepower")
+boxplot(mpg01, weight, main = "weight Vs mpg01",
+        xlab = "mpg efficiency", ylab = "weight")
+#par(mfrow = c(1,1))
+```
+
+Using this we notice that the absolute correlation value of mpg01 with the cylinder, displacement, horsepower and weight is closer to 1 and hence these features are most likely to be useful in predicting mpg01. If the displacement is above 200, the mpg01 will be less than the median and if the displacement is greater than 200 then there is a higher possibility of mpg01 being greater than median. if the weight is above 3500, its mpg is less than the median. Likewise, if the weight is below 2700, the mpg is greater than the median. if the horsepower is below 100 then mpg is greater than median. And if horsepower is greater than 100, then mpg is less than median. We can see that cylinders also have some relationship with mpg01. It is very common that for a vehicle with 4 cylinders to have higher mpg than lower mpg, but it is common for 6 or 8 cylinder vehicles to have lower mpg than higher mpg.
+
+(c) Split the data into a training set and a test set.
+
+```{r partc}
+set.seed(123)
+splitratio <- sample(1:nrow(myAuto), nrow(myAuto)*0.75 , replace=F) # 75% train, 25% test
+Auto.train <- myAuto[splitratio,]
+Auto.test <- myAuto[-splitratio,]
+mpg01.test <- mpg01[-splitratio]
+dim(Auto.train)
+dim(Auto.test)
+dim(mpg01.test)
+```
+
+(d) Perform LDA on the training data in order to predict **mpg01**
+using the variables that seemed most associated with **mpg01** in
+
+```{r partd1}
+library(MASS)
+lda.fit <- lda(mpg01 ~ cylinders + weight + displacement + horsepower, data = Auto.train)
+lda.fit
+lda.fit.pred <- predict(lda.fit, Auto.test)$class
+table(lda.fit.pred, Auto.test$mpg01)
+```
+
+(d).(b). What is the test error of the model obtained?
+
+```{r partd2}
+mean(lda.fit.pred != Auto.test$mpg01)
+```
+
+The test error rate of the model based on the 75:25 split with respect to 75% as in training set and 25% as in test set is 11.2%.
+
+(e) Perform QDA on the training data in order to predict **mpg01**
+using the variables that seemed most associated with **mpg01** in
+
+```{r parte}
+fit.qda <- qda(mpg01~cylinders + weight + displacement + horsepower, data=Auto.train)
+fit.qda.pred <- predict(fit.qda, Auto.test)$class
+table(fit.qda.pred, Auto.test$mpg01)
+```
+
+(e). (b). What is the test error of the model obtained?
+
+```{r parte2}
+mean(fit.qda.pred != Auto.test$mpg01)
+```
+
+The test error rate of the model is 10.2%.
+
+(f) Perform logistic regression on the training data in order to predict **mpg01** using the variables that seemed most associated with **mpg01** in 
+
+```{r partf1}
+fit.logit <- glm(mpg01~cylinders+displacement+horsepower+weight, data=Auto.train,
+                 family=binomial)
+logit.prob <- predict(fit.logit, Auto.test, type="response")
+logit.pred <- ifelse(logit.prob > 0.5, 1, 0)
+table(logit.pred, Auto.test$mpg01)
+```
+
+(f).(b). What is the test error of the model obtained?
+
+```{r partf2}
+mean(logit.pred != Auto.test$mpg01)
+```
+
+The test error rate of the model is 12.25%
+
+(g) Perform KNN on the training data, with several values of *K*, in
+order to predict **mpg01**. Use only the variables that seemed most
+associated with **mpg01** in  (b). What test errors do you obtain?
+
+```{r partg}
+library(class)
+train.X <- cbind(Auto.train$cylinders, Auto.train$displacement, Auto.train$weight,
+                 Auto.train$horsepower)
+test.X <- cbind(Auto.test$cylinders, Auto.test$displacement, Auto.test$weight,
+                Auto.test$horsepower)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=1)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=10)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=20)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=30)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=50)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=100)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+knn.pred <- knn(train.X, test.X, Auto.train$mpg01, k=200)
+table(knn.pred, Auto.test$mpg01)
+mean(knn.pred != Auto.test$mpg01)
+```
+
+The K values are as above:
+
+1. K = 1, The error rate is 17.3%
+2. K = 10, The error rate is 10.2%
+3. K = 20, The error rate is 10.2%
+4. K = 30, The error rate is 11.2%
+5. K = 50, The error rate is 12.2%
+6. K = 100, The error rate is 12.2%
+7. K = 200, The error rate is 14.3%
+
+Which value of *K* seems to perform the best on this data set?
+
+According to the dataset, the best *K* with respect to the error rate is 10 and 20. 
