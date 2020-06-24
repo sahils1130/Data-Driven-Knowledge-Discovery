@@ -1,6 +1,6 @@
 ---
 title: 'Milestone 2: Data Summary/Visualization'
-author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+author: "Sahil Shah"
 date: "6/23/2020"
 output:
   pdf_document: default
