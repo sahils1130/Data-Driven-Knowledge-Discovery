@@ -1,0 +1,11 @@
+﻿Feature Name,Description,Min. value,Max. value,SD
+Administrative,Number of pages visited by the visitor about account management,0,27,3.322
+Administrative duration,Total amount of time (in seconds) spent by the visitor on account management related pages,0,3399,176.8
+Informational,"Number of pages visited by the visitor about Web site, communication and address information of the shopping site",0,24,1.27
+Informational duration,Total amount of time (in seconds) spent by the visitor on informational pages,0,2549.4,140.7
+Product related,Number of pages visited by visitor about product related pages,0,705,44.48
+Product related duration,Total amount of time (in seconds) spent by the visitor on product related pages,0,63974,1914
+Bounce rates,Average bounce rate value of the pages visited by the visitor,0,0.2,0.04849
+Exit rate,Average exit rate value of the pages visited by the visitor,0,0.2,0.0486
+Page value,Average page value of the pages visited by the visitor,0,361.8,18.57
+Special day,Closeness of the site visiting time to a special day,0,1,0.1989

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1592788990346.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2651012235",
+    "id" : "6CC8F9D3",
+    "lastKnownWriteTime" : 1592459911,
+    "last_content_update" : 1592459911,
+    "path" : "~/GitHub/Data-Science/ML Udemy/Part 3 - Classification/Section 15 - K-Nearest Neighbors (K-NN)/R/knn.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "62,67",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
