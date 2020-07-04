@@ -1,0 +1,7 @@
+"0","val.errors <- rep(NA, 20)"
+"0","x_cols = colnames(x, do.NULL = FALSE, prefix = ""x."")"
+"0","for (i in 1:20) {"
+"0","    coefi <- coef(regfit.full, id = i)"
+"0","    val.errors[i] <- sqrt(sum((b[x_cols %in% names(coefi)] - coefi[names(coefi) %in% x_cols])^2) + sum(b[!(x_cols %in% names(coefi))])^2)"
+"0","}"
+"0","plot(val.errors, xlab = ""Number of Coefficients"", ylab = ""Mean Squared Error for estimate and true coefficients"", pch = 19, type = ""b"",col=""purple"")"

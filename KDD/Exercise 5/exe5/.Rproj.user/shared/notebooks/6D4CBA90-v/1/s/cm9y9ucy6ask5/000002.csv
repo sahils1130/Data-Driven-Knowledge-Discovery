@@ -1,0 +1,6 @@
+"0","train <- sample(seq(1000), 100, replace = FALSE)"
+"0","test <- (!train) "
+"0","y.train = y[train, ]"
+"0","y.test = y[-train, ]"
+"0","x.train = x[train, ]"
+"0","x.test = x[-train, ]"

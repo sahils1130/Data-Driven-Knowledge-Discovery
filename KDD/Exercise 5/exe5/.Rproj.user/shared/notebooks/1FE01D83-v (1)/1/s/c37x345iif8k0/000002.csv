@@ -1,0 +1,8 @@
+"0","test.errors = rep(NA, p)"
+"0","for (i in 1:p) {"
+"0","    coefi = coef(regfit.full, id = i)"
+"0","    pred = as.matrix(x.test[, x_cols %in% names(coefi)]) %*% coefi[names(coefi) %in% "
+"0","        x_cols]"
+"0","    test.errors[i] = mean((y.test - pred)^2)"
+"0","}"
+"0","plot(test.errors, xlab = ""Number of Predictors"", ylab = ""Test MSE"", col = ""red"", pch = 19, type = ""b"")"

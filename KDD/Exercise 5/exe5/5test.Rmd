@@ -1,0 +1,109 @@
+---
+title: "Exercise 6.8.10"
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "6/27/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We have seen that as the number of features used in a model increases, the training error will necessarily decrease, but the test error may not. We will now explore this in a simulated data set.
+
+(a) Generate a data set with p = 20 features,n = 1,000 observations, and an associated quantitative response vector generated according to the model Y = X $\beta$ + \(\epsilon\), where $\beta$ has some elements that are exactly equal to zero.
+
+```{r parta}
+library(leaps)
+set.seed(1)
+p = 20
+n = 1000
+x = matrix(rnorm(n * p), n, p)
+B = rnorm(p)
+B[3] = 0
+B[4] = 0
+B[9] = 0
+B[19] = 0
+B[10] = 0
+eps = rnorm(p)
+y = x %*% B + eps
+```
+
+(b) Split your data set into a training set containing 100 observations and a test set containing 900 observations.
+
+```{r partb}
+train = sample(seq(1000), 100, replace = FALSE)
+y.train = y[train, ]
+y.test = y[-train, ]
+x.train = x[train, ]
+x.test = x[-train, ]
+```
+
+(c) Perform best subset selection on the training set, and plot the training set MSE associated with the best model of each size.
+
+```{r partc}
+library(leaps)
+regfit.full = regsubsets(y ~ ., data = data.frame(x = x.train, y = y.train), 
+    nvmax = p)
+val.errors = rep(NA, p)
+x_cols = colnames(x, do.NULL = FALSE, prefix = "x.")
+for (i in 1:p) {
+    coefi = coef(regfit.full, id = i)
+    pred = as.matrix(x.train[, x_cols %in% names(coefi)]) %*% coefi[names(coefi) %in% 
+        x_cols]
+    val.errors[i] = mean((y.train - pred)^2)
+}
+plot(val.errors, ylab = "Training MSE", pch = 19, type = "b", col = "blue")
+```
+
+(d) Plot the test set MSE associated with the best model of each
+size. 
+
+```{r partd}
+val.errors = rep(NA, p)
+for (i in 1:p) {
+    coefi = coef(regfit.full, id = i)
+    pred = as.matrix(x.test[, x_cols %in% names(coefi)]) %*% coefi[names(coefi) %in% 
+        x_cols]
+    val.errors[i] = mean((y.test - pred)^2)
+}
+plot(val.errors, ylab = "Test MSE", pch = 19, type = "b", col = "red")
+```
+
+(e) For which model size does the test set MSE take on its minimum
+value? Comment on your results. If it takes on its minimum value
+for a model containing only an intercept or a model containing
+all of the features, then play around with the way that you are
+generating the data in (a) until you come up with a scenario in
+which the test set MSE is minimized for an intermediate model
+size.
+
+```{r parte}
+which.min(val.errors)
+```
+
+16 parameter model has the smallest test MSE.
+
+(f) How does the model at which the test set MSE is minimized
+compare to the true model used to generate the data? Comment
+on the coefficient values.
+
+```{r partf}
+coef(regfit.full, id = 18)
+```
+
+(g) 
+
+```{r partg}
+val.errors = rep(NA, p)
+A = rep(NA, p)
+B = rep(NA, p)
+for (i in 1:p) {
+    coefi = coef(regfit.full, id = i)
+    A[i] = length(coefi) - 1
+    B[i] = sqrt(sum((b[x_cols %in% names(coefi)] - coefi[names(coefi) %in% x_cols])^2) + 
+        sum(b[!(x_cols %in% names(coefi))])^2)
+}
+plot(x = A, y = B, xlab = "number of coefficients", ylab = "error between estimated and true coefficients", col = "purple")
+which.min(B)
+```
