@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1594163135079.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "BEBA003F",
+    "lastKnownWriteTime" : 27584981516943471,
+    "last_content_update" : 1594163135079,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "F99275E8",
+        "caption" : "dataset_knn",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=dataset_knn&cache_key=F99275E8",
+        "displayedObservations" : "12330",
+        "environment" : "",
+        "expression" : "dataset_knn",
+        "object" : "dataset_knn",
+        "preview" : "0",
+        "totalObservations" : "12330",
+        "variables" : "18"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

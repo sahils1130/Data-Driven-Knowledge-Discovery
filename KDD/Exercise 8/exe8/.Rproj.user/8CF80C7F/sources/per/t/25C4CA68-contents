@@ -1,0 +1,127 @@
+---
+title: "viii. Exercise 9.7.5"
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "7/17/2020"
+output:
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We have seen that we can fit an SVM with a non-linear kernel in order
+to perform classification using a non-linear decision boundary. We will
+now see that we can also obtain a non-linear decision boundary by
+performing logistic regression using non-linear transformations of the
+features.370 9. Support Vector Machines
+
+(a) Generate a data set with n = 500 and p = 2, such that the observations belong to two classes with a quadratic decision boundary between them. For instance, you can do this as follows:
+
+<!-- > x1= runif (500) -0.5 -->
+<!-- > x2= runif (500) -0.5 -->
+<!-- > y=1*( x1^2- x2 ^2 > 0) -->
+
+```{r datagen}
+set.seed(123)
+n <- 500
+p <- 2
+x1 <- runif(n) - 0.5
+x2 <- runif(n) - 0.5
+y <- 1*(x1^2-x2^2 > 0)
+```
+
+(b) Plot the observations, colored according to their class labels.
+Your plot should display $X_1$ on the *x*-axis, and $X_2$ on the *y*-axis.
+
+```{r partb}
+plot(x1,x2, col = ifelse(y, 'blue', 'red'), xlab = 'X1', ylab = 'X2', main = "Initial Data")
+```
+
+The data defines that these is a non-linear data.
+
+(c) Fit a logistic regression model to the data, using $X_1$ and $X_2$ as
+predictors.
+
+```{r logreg}
+# require(glm)
+log.fit <- glm(y ~ x1 + x2, family = binomial)
+summary(log.fit)
+```
+
+$X_1$ and $X_2$ are insignificant for predicting the *y*.
+
+(d) Apply this model to the *training data* in order to obtain a predicted class label for each training observation. Plot the observations, colored according to the *predicted class* labels. The decision boundary should be linear.
+
+```{r partd}
+df = data.frame(x1 = x1, x2 = x2, y = as.factor(y))
+log.prob = predict(log.fit, df, type = "response")
+log.pred = ifelse(log.prob>0.52, 1, 0)
+df.neg = df[log.pred == 0, ]
+df.pos = df[log.pred == 1, ]
+plot(df.pos$x1, df.pos$x2, col = "blue", xlab = "X1", ylab = "X2", main = "Logistic")
+points(df.neg$x1, df.neg$x2, col = "red")
+```
+
+The logistic model, with the probablity threshold of 0.5, The classification of the points are done in single class. We shift the probablity threshold to 0.52 to have the decision boundry. Hence, we get the linear data in the plot.
+
+(e) Now fit a logistic regression model to the data using non-linear
+functions of $X_1$ and $X_2$ as predictors (e.g. $X_1^2$, $X_1 * X_2$, $log(X_2)$,
+and so forth).
+
+```{r parte}
+log.fit2 = glm(y ~ x1 + x2 + I(x1^2) + I(x2^2) + I(x1*x2), data = df, family = "binomial")
+# log.fit2 = glm(y ~ poly(x1,2) + poly(x2,2) + I(x1 * x2), data = df, family = "binomial")
+summary(log.fit2)
+```
+
+(f) Apply this model to the training data in order to obtain a predicted class label for each training observation. Plot the observations, colored according to the predicted class labels. The decision boundary should be obviously non-linear. If it is not,
+then repeat (a)-(e) until you come up with an example in which
+the predicted class labels are obviously non-linear.
+
+```{r partf}
+log.prob1 = predict(log.fit2, df, type = "response")
+log.pred1 = ifelse(log.prob1>0.52, 1, 0)
+df.neg1 = df[log.pred1 == 0, ]
+df.pos1 = df[log.pred1 == 1, ]
+plot(df.pos1$x1, df.pos1$x2, col = "blue", xlab = "X1", ylab = "X2")
+points(df.neg1$x1, df.neg1$x2, col = "red")
+```
+
+(g) Fit a support vector classifier to the data with $X_1$ and $X_2$ as
+predictors. Obtain a class prediction for each training observation. Plot the observations, colored according to the *predicted class labels*.
+
+```{r partg}
+library(e1071)
+tune.out <- tune(svm, y ~ ., data = df, kernel = "linear", 
+                 ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100, 1000)))
+summary(tune.out)
+names(tune.out)
+bestmod = tune.out$best.model
+y_hat <- predict(bestmod, newdata = data.frame(x1 = x1, x2 = x2))
+y_hat <- as.numeric(as.character(y_hat))
+plot(x1, x2, col = ifelse(y_hat, "blue", "red"), xlab = "X1", ylab = "X2")
+```
+
+Here the linear kernel even with the cost 0.1 fails to find the linear decision boundry and classifies into the one class.
+
+(h) Fit a SVM using a non-linear kernel to the data. Obtain a class
+prediction for each training observation. Plot the observations,
+colored according to the *predicted class labels*.
+
+```{r parth}
+tune.out1 <- tune(svm, y ~ ., data = df, kernel = "radial", 
+                  ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100, 1000),
+                                gamma = c(0.5, 1, 2, 3, 4)))
+summary(tune.out1)
+names(tune.out1)
+bestmod1 = tune.out1$best.model
+y_hat1 <- predict(bestmod1, newdata = data.frame(x1 = x1, x2 = x2))
+y_hat1 <- as.numeric(as.character(y_hat1))
+plot(x1, x2, col = ifelse(y_hat1, "blue", "red"), xlab = "X1", ylab = "X2")
+```
+
+(i) Comment on your results.
+
+The practical approach towards the idea of generating the SVM with non-linear kernel are having significantly better approach in finding the non-linear boundry. The logistic regression with no interactions and the SVM generated with linear kernels fails to find the decision boundry. We could get similar kind of results in logistic regression, but by adding non-linear functions, and the process is way more complicated. The kernel based on radial requires one additional tuning parameter i.e. gamma, which is done using cross-validation. Also, SVM linear kernels are acceptable when using a small cost.

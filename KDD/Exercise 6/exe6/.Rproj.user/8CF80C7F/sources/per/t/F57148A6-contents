@@ -1,0 +1,80 @@
+---
+title: "Exercise VI.7.9.7"
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "7/4/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The **Wage** data set contains a number of other features not explored
+in this chapter, such as marital status (**maritl**), job class (**jobclass**),
+and others. Explore the relationships between some of these other
+predictors and wage, and use non-linear fitting techniques in order to
+fit flexible models to the data. Create plots of the results obtained,
+and write a summary of your findings.
+
+Importing the Dataset
+
+```{r data}
+library(ISLR)
+data(Wage)
+attach(Wage)
+```
+
+Exploring the features **maritl**, **jobclass**, **health**, and **health_ins**  with the help of `summary()`
+
+```{r summary}
+set.seed(123)
+summary(Wage[, c("maritl", "jobclass", "health", "health_ins")] )
+```
+
+Generating Box-Plots
+
+```{r plots}
+#attach(Wage)
+par(mfrow = c(1, 2))
+plot(maritl, wage, xlab = "Marital Status", ylab = "Wages")
+plot(jobclass, wage, xlab = "Job Class", ylab = "Wages")
+plot(health, wage, xlab = "Health", ylab = "Wages")
+plot(health_ins, wage, xlab = "Health Insurance", ylab = "Wages")
+```
+
+**maritl**, **jobclass**, **health** and **health_ins** are categorical variables.
+From the plots it can be said that the couple who are married earns more than other three categories and Informational wage earns more on average.From the plots we also see that better the wages, better is the health. Health insurance is directly related to wages. People having health insurance have more wages.
+
+Generating the polynomial and step function for the same.
+
+```{r poly}
+poly_fit = lm(wage ~ maritl, data = Wage)
+#deviance(poly_fit)
+poly_fit1 = lm(wage ~ jobclass, data = Wage)
+#deviance(poly_fit1)
+poly_fit2 = lm(wage ~ maritl + jobclass, data = Wage)
+#deviance(poly_fit2)
+anova(poly_fit, poly_fit1, poly_fit2)
+```
+
+The sample data fit is minimized with the most complex linear model.
+
+We will use `gam()` to predict the **wage** using the splines of the **year**, **education**, **age**, **maritl**, and **jobclass**. Because we can't fit splines in the categorical values.
+
+```{r splines}
+library(gam)
+fit1 <- gam(wage ~ lo(year, span = 0.7) + s(age, 5) + education, data = Wage)
+fit2 <- gam(wage ~ lo(year, span = 0.7) + s(age, 5) + education + jobclass, data = Wage)
+fit3 <- gam(wage ~ lo(year, span = 0.7) + s(age, 5) + education + maritl, data = Wage)
+fit4 <- gam(wage ~ lo(year, span = 0.7) + s(age, 5) + education + jobclass + maritl, data = Wage)
+anova(fit1, fit2, fit3, fit4)
+```
+
+It is obvious that **age** has non-linear relationship with **wage**. Besides, there are acceptable information that **wage** feature differs from the given different qualitative predictors including **education**, **jobclass**, **maritl**. We also discovered that **year** has an interaction effect with **age** therefore we don't have to add individual basis functions for **year** and **age**. According to the results the model 3 and model 4 can be considered as the significantly better.
+
+```{r plotspred}
+par(mfrow = c(2, 3))
+plot(fit3, se = T, col = "blue")
+par(mfrow = c(2, 3))
+plot(fit4, se = T, col = "red")
+```

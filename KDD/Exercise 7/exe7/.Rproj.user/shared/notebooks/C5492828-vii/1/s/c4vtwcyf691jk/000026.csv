@@ -1,0 +1,6 @@
+"0","yhat <- predict(prune.carseats, newdata = Carseats.test)"
+"0","mean((Carseats.test$Sales-yhat)^2)"
+"1","[1]"
+"1"," 4.674089"
+"1","
+"

@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1594502220924.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3468349223",
+    "id" : "71046F43",
+    "lastKnownWriteTime" : 1594515075,
+    "last_content_update" : 1594515075895,
+    "path" : "~/GitHub/Data-Driven-Knowledge-Discovery/KDD/Exercise 7/exe7/vii.Rmd",
+    "project_path" : "vii.Rmd",
+    "properties" : {
+        "cursorPosition" : "73,82",
+        "last_setup_crc32" : "",
+        "scrollLine" : "72"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

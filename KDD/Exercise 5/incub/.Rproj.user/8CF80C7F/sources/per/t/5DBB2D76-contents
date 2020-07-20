@@ -1,0 +1,186 @@
+---
+title: 'Analysis of Online Shoppers’ Purchase Intention'
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "6/23/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(echo= TRUE, warning=FALSE, message=FALSE)
+```
+
+## \center Milestone 1: Project proposal \center ##
+
+### Problem Description ###
+
+  In the era of online shopping, known as e-shopping, people use online transactions to buy the items they need while exploring it online. This helps the buyers as well as sellers to understand the patterns, intentions, and behavior of various online customers. Thereby, helping businesses improve their revenue by focusing on customer experiences and marketing. Hence, the analysis of online shoppers’ purchase intention has become an emerging field in data mining. Click-stream analysis refers to the online shoppers’ behavior analysis as they invoke a sequence of web pages in a particular session. Therefore, analyzing this data is a primary goal for successful online businesses as they extract the clicks and behavior through web page requests. Our proposed solution is to provide a decisive and feasible recommendation algorithm that will allow us to predict the behavior of the shoppers’.
+
+The dataset used in the project is based on *"online shoppers purchasing intention"* available on UCI Machine Learning dataset. \
+
+URL : https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset
+<!-- #### Install Packages -->
+
+<!-- remove the comments to install the packages if they aren't installed -->
+
+<!-- ```{r install} -->
+<!-- # install.packages("ggplot2") -->
+<!-- # install.packages("tidyverse") -->
+<!-- # install.packages("gmodels") -->
+<!-- # install.packages("dplyr") -->
+<!-- # install.packages("ggmosaic") -->
+<!-- # install.packages("corrplot") -->
+<!-- # install.packages("caret") -->
+<!-- # install.packages("rpart") -->
+<!-- # install.packages("rpart.plot") -->
+<!-- # install.packages("cluster") -->
+<!-- # install.packages("fpc") -->
+<!-- # install.packages("data.table") -->
+<!-- ``` -->
+
+#### Importing Libraries \
+
+This are the important libraries that are to be installed for the execution of the file.
+
+```{r libraries}
+library(ggplot2)
+library(tidyverse)
+library(gmodels)
+library(dplyr)
+library(ggmosaic)
+library(corrplot)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(cluster)
+library(fpc)
+library(data.table)
+library(knitr)
+library(kableExtra)
+```
+
+#### Importing the Dataset \
+
+The `read.csv()` command is used to import the dataset.
+
+```{r dataset}
+dataset <- read.csv("online_shoppers_intention.csv", header = TRUE)
+attach(dataset)
+```
+
+Checking the number of columns and rows of the dataset.
+
+```{r colsandrows}
+ncol(dataset)
+nrow(dataset)
+```
+
+Looking at the dataset data structure.
+
+```{r datastructure}
+str(dataset)
+summary(dataset)
+```
+
+The purchasing intention model is designed as a classification problem which measures the purchasers’ commitment to finalize purchase intent. Hence we have the session data of the users which has two categories : users who purchased the item and who didn’t. The dataset consists of both numerical data and categorical data, and thus the target value is categorical. Table 1 refers to the numerical features and Table 2 refers to the categorical features used in the prediction model respectively. There are a total of 12,330 rows where each row represents session data of one particular user.
+
+```{r table2}
+tab1 <- read.csv("table1.csv", header = TRUE)
+kable(tab1) %>%
+  kable_styling(full_width = T)
+tab2 <- read.csv("table2.csv", header = TRUE)
+kable(tab2) %>%
+  kable_styling(full_width = T)
+```
+
+Taking the look at the **REVENUE** column which is the target column. The datatype of the REVENUE column is Logical which holds the value **TRUE** and **FALSE**.
+
+```{r revenue}
+library(gmodels)
+summary(dataset$Revenue)
+CrossTable(dataset$Revenue)
+```
+
+Adding the new *Revenue_binary* column by using Logical Data of Shopper's Revenue into binary dependent variable that will helpful for potential regression models. The data will be converted with values 0 and 1, i.e. If it is false the value is 0 and if true it will be 1.
+
+```{r binary}
+dataset <- dataset %>%
+  mutate(Revenue_binary = ifelse(dataset$Revenue == "TRUE", 1, 0))
+```
+
+Checking the dataset if it has any missing values.
+
+```{r missing}
+colSums(is.na(dataset))
+```
+
+#### Visualizations \
+
+##### Month
+
+```{r vis}
+dataset %>%
+  ggplot() + 
+  aes(x = Month, Revenue = ..count../nrow(dataset), fill = Revenue) +
+  geom_bar() +
+  ylab("Frequency")
+```
+
+The plot describes the frequency of the revenue generated over the months.
+
+```{r vis2}
+table_month = table(dataset$Month, dataset$Revenue)
+tab_mon =  as.data.frame(prop.table(table_month,2))
+colnames(tab_mon) = c("Month", "Revenue", "perc")
+ggplot(data = tab_mon, aes(x = Month, y = perc, fill = Revenue)) + 
+  geom_bar(stat = 'identity', position = 'dodge', alpha = 2/3) + 
+  xlab("Month")+
+  ylab("Percent")
+```
+
+The plot portrays the high shopping rates in the months September, October and November with respect to the customers not buying the products. These months are comparatively considered as the *Holiday Season Months*. Also, there is high hits on the website with positive revenue in the month of may.
+
+##### Visitor
+
+```{r themesetup}
+theme_set(theme_bw())
+
+## setting default parameters for mosaic plots
+mosaic_theme = theme(axis.text.x = element_text(angle = 90,
+                                                hjust = 1,
+                                                vjust = 0.5),
+                     axis.text.y = element_blank(),
+                     axis.ticks.y = element_blank())
+```
+
+```{r vis3}
+dataset %>% 
+  ggplot() +
+  geom_mosaic(aes(x = product(Revenue, VisitorType), fill = Revenue)) +
+  mosaic_theme +
+  xlab("Visitor Type") +
+  ylab(NULL)
+```
+
+The comparison of the VisitorType which are New_Visitors, Returning_Visitor and Others with Revenue generated. There are many returning visitors in the contrast to less new visitors. Although, the new visitors have high probablity of purchasing the product and help the revenue than the returning visitors.
+
+##### Weekend
+
+```{r weekend}
+CrossTable(dataset$Weekend, dataset$Revenue)
+dataset %>%
+  ggplot() +
+  mosaic_theme +
+  geom_mosaic(aes(x = product(Revenue,Weekend), fill = Revenue)) +
+  xlab("Weekend") +
+  ylab(NULL)
+```
+
+The **Weekend** analysis shows that more than 70% of visitors are visiting the site on weekdays, with 15% chance of actually buying the products. The rest 30% visit on the weekend and there is 17% speculation of buying.
+
+# Appendix---Code
+
+```{r ref.label=knitr::all_labels(), echo = T, eval = F}
+```

@@ -1,0 +1,6 @@
+"0","dataset %>% "
+"0","  ggplot() +"
+"0","  geom_mosaic(aes(x = product(Revenue, VisitorType), fill = Revenue)) +"
+"0","  mosaic_theme +"
+"0","  xlab(""Visitor Type"") +"
+"0","  ylab(NULL)"

@@ -1,0 +1,2 @@
+"0","dataset <- dataset %>%"
+"0","  mutate(Revenue_binary = ifelse(dataset$Revenue == ""TRUE"", 1, 0))"

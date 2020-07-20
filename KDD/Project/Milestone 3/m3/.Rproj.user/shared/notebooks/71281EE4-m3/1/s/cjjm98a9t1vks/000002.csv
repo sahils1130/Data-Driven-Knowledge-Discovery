@@ -1,0 +1,6 @@
+"0","dt.pred <- predict(dt_model,test_data,type = ""class"")"
+"0","mean(dt.pred==test_data$Revenue)"
+"1","[1]"
+"1"," 0.8965937"
+"1","
+"

@@ -1,0 +1,7 @@
+"0","library(class)"
+"0","y_pred = knn(train = training_data_knn[, -18],"
+"0","             test = test_data_knn[, -18],"
+"0","             cl = training_data_knn[, 18],"
+"0","             k = 5,"
+"0","             prob = TRUE)"
+"0",""

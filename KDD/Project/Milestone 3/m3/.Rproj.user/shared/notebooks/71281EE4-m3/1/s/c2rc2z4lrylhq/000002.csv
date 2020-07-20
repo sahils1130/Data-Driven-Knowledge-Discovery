@@ -1,0 +1,5 @@
+"0","dataset_classify = dataset[-c(19:22)]"
+"0","set.seed(123)"
+"0","split = sample.split(dataset_classify$Revenue, SplitRatio = 0.8)"
+"0","training_data = subset(dataset_classify, split == TRUE)"
+"0","test_data = subset(dataset_classify, split == FALSE)"

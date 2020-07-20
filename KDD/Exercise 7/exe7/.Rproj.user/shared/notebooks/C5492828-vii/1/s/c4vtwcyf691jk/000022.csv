@@ -1,0 +1,8 @@
+"0","best.size <- cv.carseats$size[which.min(cv.carseats$dev)]"
+"0","best.size"
+"1","[1]"
+"1"," 13"
+"1","
+"
+"0","prune.carseats <- prune.tree(tree.carseats, best = best.size)"
+"0","plot(prune.carseats)"

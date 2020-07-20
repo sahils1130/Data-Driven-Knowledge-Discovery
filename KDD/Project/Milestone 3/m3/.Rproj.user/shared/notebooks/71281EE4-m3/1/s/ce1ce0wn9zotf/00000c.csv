@@ -1,0 +1,3 @@
+"0","tab2 <- read.csv(""table2.csv"", header = TRUE)"
+"0","kable(tab2) %>%"
+"0","  kable_styling(full_width = T)"

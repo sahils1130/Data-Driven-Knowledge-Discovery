@@ -1,0 +1,2 @@
+"0","dt_model<- rpart(Revenue ~ . , data = training_data, method=""class"")"
+"0","rpart.plot(dt_model)"

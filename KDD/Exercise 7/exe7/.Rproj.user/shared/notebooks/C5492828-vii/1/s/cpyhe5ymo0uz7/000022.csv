@@ -1,0 +1,6 @@
+"0","tree.pred=predict(tree.carseats, newdata = Carseats.test)"
+"0","mean((Carseats.test$Sales-tree.pred)^2)"
+"1","[1]"
+"1"," 4.395357"
+"1","
+"

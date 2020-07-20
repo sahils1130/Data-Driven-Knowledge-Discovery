@@ -1,0 +1,89 @@
+---
+title: "vii.Exercise 8.4.8"
+author: "Vidhi Shah, Sahil Shah, Kaarthik Sundaramoorthy"
+date: "7/11/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In the lab, a classiﬁcation tree was applied to the **Carseats** data set after converting **Sales** into a qualitative response variable. Now we will seek to predict **Sales** using regression trees and related approaches, treating the response as a quantitative variable.
+
+```{r import}
+library(ISLR)
+library(tree)
+library(randomForest)
+attach(Carseats)
+```
+
+(a) Split the data set into a training set and a test set.
+
+```{r parta}
+set.seed(123)
+train <- sample(1:nrow(Carseats), nrow(Carseats) / 2)
+Carseats.train <- Carseats[train, ]
+Carseats.test <- Carseats[-train, ]
+```
+
+(b) Fit a regression tree to the training set. Plot the tree, and interpret the results. What test MSE do you obtain?
+
+```{r partb}
+tree.carseats <- tree(Sales ~ ., data = Carseats, subset = train )
+summary(tree.carseats)
+plot(tree.carseats)
+text(tree.carseats,pretty=0,cex=0.6)
+tree.pred=predict(tree.carseats, newdata = Carseats.test)
+mean((tree.pred-Carseats.test$Sales)^2)
+```
+
+The tree defines that the attribute shelf location is the primary factor and which results in lower sales. Following to that the price is the next important factor involving the split with both branches below the root. The test MSE here is about `r mean((tree.pred-Carseats.test$Sales)^2)`.
+
+(c) Use cross-validation in order to determine the optimal level of tree complexity. Does pruning the tree improve the test MSE?
+
+```{r partc}
+set.seed(2)
+cv.carseats <- cv.tree(tree.carseats)
+cv.carseats
+par(mfrow = c(1, 2))
+plot(cv.carseats$size, cv.carseats$dev, type = "b")
+plot(cv.carseats$k, cv.carseats$dev, type = "b")
+best.size <- cv.carseats$size[which.min(cv.carseats$dev)]
+best.size
+prune.carseats <- prune.tree(tree.carseats, best = best.size)
+plot(prune.carseats)
+text(prune.carseats, pretty = 0,cex=0.6)
+yhat <- predict(prune.carseats, newdata = Carseats.test)
+mean((yhat - Carseats.test$Sales)^2)
+```
+
+The best size here is `r best.size` . Pruning the tree in this case scenario increases the test MSE to `r mean((yhat - Carseats.test$Sales)^2)`.
+
+(d) Use the bagging approach in order to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important.
+
+```{r partd}
+set.seed(1)
+bag.carseats = randomForest(Sales~.,data=Carseats.train,mtry = 10, importance = TRUE)
+yhat.bag <- predict(bag.carseats, newdata = Carseats.test)
+mean((yhat.bag - Carseats.test$Sales)^2)
+importance(bag.carseats)
+varImpPlot(bag.carseats)
+```
+
+The bagging method improves the MSE to `r mean((yhat.bag - Carseats.test$Sales)^2)`. From the graph we can also see that the **Price**, **ShelveLoc**, and **Age** are the important predictors with respect to the **Sale**.
+
+(e) Use random forests to analyze this data. What test MSE do you obtain? Use the `importance()` function to determine which variables are most important. Describe the eﬀect of m, the number of variables considered at each split, on the error rate obtained.
+
+```{r parte}
+rf.carseats <- randomForest(Sales ~ ., data = Carseats.train, mtry = 5, importance = TRUE)
+yhat.rf <- predict(rf.carseats, newdata = Carseats.test)
+mean((yhat.rf - Carseats.test$Sales)^2)
+importance(rf.carseats)
+varImpPlot(rf.carseats)
+```
+
+The random forest increases the MSE to `r mean((yhat.rf - Carseats.test$Sales)^2)`. The change in the _m_ of the test MSE is seen between **2.7** to **3.2**. From the above plot we see that the variable importance factors for prediction are same as in the bagging approach i.e **Price**, **ShelveLoc**, and **Age**.
+
+
+

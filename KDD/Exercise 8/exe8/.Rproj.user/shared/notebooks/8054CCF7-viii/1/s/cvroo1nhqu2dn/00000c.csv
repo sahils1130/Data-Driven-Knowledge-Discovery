@@ -1,0 +1,1 @@
+"0","plot(x1,x2, col = ifelse(y, 'blue', 'red'), xlab = 'X1', ylab = 'X2', main = ""Initial Data"")"

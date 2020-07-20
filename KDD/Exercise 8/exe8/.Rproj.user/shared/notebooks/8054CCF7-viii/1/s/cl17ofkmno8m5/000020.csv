@@ -1,0 +1,6 @@
+"0","df = data.frame(x1 = x1, x2 = x2, y = as.factor(y))"
+"0","log.prob = predict(log.fit, df, type = ""response"")"
+"0","log.pred = ifelse(log.prob>0.52, 1, 0)"
+"0","df.neg = df[log.pred == 0, ]"
+"0","df.pos = df[log.pred == 1, ]"
+"0","plot(df.pos$x1, df.pos$x2, col = ""blue"", xlab = ""X1"", ylab = ""X2"", main = ""Logistic"")"

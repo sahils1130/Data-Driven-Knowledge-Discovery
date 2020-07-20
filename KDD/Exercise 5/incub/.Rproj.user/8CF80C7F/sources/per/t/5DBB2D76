@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1594078261927.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "187796663",
+    "id" : "5DBB2D76",
+    "lastKnownWriteTime" : 1594079115,
+    "last_content_update" : 1594079115702,
+    "path" : "~/GitHub/Data-Driven-Knowledge-Discovery/KDD/Project/Milestone 2/m2.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "185,3",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,11 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Implementing the Facebook Followers Dataset available on the Data Incubator blog data sources.
+
+```{r import}
+dataset <- read.csv("temp_datalab_records_social_facebook.csv", header = TRUE)
+summary(dataset)
+```

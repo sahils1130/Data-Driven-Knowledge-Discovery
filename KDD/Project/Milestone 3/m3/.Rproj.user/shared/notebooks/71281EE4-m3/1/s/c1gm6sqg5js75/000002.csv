@@ -1,0 +1,4 @@
+"0","set.seed(1233)"
+"0","splitknn = sample.split(dataset_knn$Revenue_binary, SplitRatio = 0.8)"
+"0","training_data_knn = subset(dataset_knn, split == TRUE)"
+"0","test_data_knn = subset(dataset_knn, split == FALSE)"

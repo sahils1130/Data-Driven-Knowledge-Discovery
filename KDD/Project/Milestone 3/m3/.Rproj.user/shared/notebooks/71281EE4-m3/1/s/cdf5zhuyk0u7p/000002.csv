@@ -1,0 +1,2 @@
+"0","dataset <- read.csv(""online_shoppers_intention.csv"", header = TRUE)"
+"0","attach(dataset)"

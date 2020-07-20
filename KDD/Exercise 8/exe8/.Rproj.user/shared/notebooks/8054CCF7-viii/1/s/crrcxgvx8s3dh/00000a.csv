@@ -1,0 +1,19 @@
+"0","tune.out1 <- tune(svm, y ~ ., data = df, kernel = ""radial"", ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100, 1000), gamma = c(0.5, 1, 2, 3, 4)))"
+"0","summary(tune.out1)"
+"1","
+Parameter tuning of "
+"1",""
+"1","‘svm’"
+"1",""
+"1",":
+
+"
+"1","- sampling method:"
+"1"," "
+"1","10-fold cross validation"
+"1"," "
+"1","
+
+"
+"1","- best parameters:
+"

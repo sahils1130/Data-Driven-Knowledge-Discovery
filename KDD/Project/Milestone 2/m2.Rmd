@@ -1,14 +1,22 @@
 ---
-title: 'Milestone 2: Data Summary/Visualization'
-author: "Sahil Shah"
+title: 'Analysis of Online Shoppers’ Purchase Intention'
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
 date: "6/23/2020"
 output:
   pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ```{r global_options, echo=FALSE}
 knitr::opts_chunk$set(echo= TRUE, warning=FALSE, message=FALSE)
 ```
+
+## \center Milestone 1: Project proposal \center ##
+
+### Problem Description ###
+
+  In the era of online shopping, known as e-shopping, people use online transactions to buy the items they need while exploring it online. This helps the buyers as well as sellers to understand the patterns, intentions, and behavior of various online customers. Thereby, helping businesses improve their revenue by focusing on customer experiences and marketing. Hence, the analysis of online shoppers’ purchase intention has become an emerging field in data mining. Click-stream analysis refers to the online shoppers’ behavior analysis as they invoke a sequence of web pages in a particular session. Therefore, analyzing this data is a primary goal for successful online businesses as they extract the clicks and behavior through web page requests. Our proposed solution is to provide a decisive and feasible recommendation algorithm that will allow us to predict the behavior of the shoppers’.
 
 The dataset used in the project is based on *"online shoppers purchasing intention"* available on UCI Machine Learning dataset. \
 

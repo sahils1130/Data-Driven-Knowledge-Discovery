@@ -1,0 +1,664 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Analysis of Online Shoppers' Purchase Intention},
+  pdfauthor={Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
+\title{Analysis of Online Shoppers' Purchase Intention}
+\author{Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah}
+\date{6/23/2020}
+
+\begin{document}
+\maketitle
+
+\hypertarget{milestone-1-project-proposal}{%
+\subsection{\texorpdfstring{\center Milestone 1: Project proposal
+\center }{Milestone 1: Project proposal }}\label{milestone-1-project-proposal}}
+
+\hypertarget{problem-description}{%
+\subsubsection{Problem Description}\label{problem-description}}
+
+In the era of online shopping, known as e-shopping, people use online
+transactions to buy the items they need while exploring it online. This
+helps the buyers as well as sellers to understand the patterns,
+intentions, and behavior of various online customers. Thereby, helping
+businesses improve their revenue by focusing on customer experiences and
+marketing. Hence, the analysis of online shoppers' purchase intention
+has become an emerging field in data mining. Click-stream analysis
+refers to the online shoppers' behavior analysis as they invoke a
+sequence of web pages in a particular session. Therefore, analyzing this
+data is a primary goal for successful online businesses as they extract
+the clicks and behavior through web page requests. Our proposed solution
+is to provide a decisive and feasible recommendation algorithm that will
+allow us to predict the behavior of the shoppers'.
+
+The dataset used in the project is based on \emph{``online shoppers
+purchasing intention''} available on UCI Machine Learning dataset.\\
+
+URL :
+\url{https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset}
+
+\hypertarget{importing-libraries}{%
+\paragraph{\texorpdfstring{Importing Libraries\\
+}{Importing Libraries }}\label{importing-libraries}}
+
+This are the important libraries that are to be installed for the
+execution of the file.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(gmodels)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(ggmosaic)}
+\KeywordTok{library}\NormalTok{(corrplot)}
+\KeywordTok{library}\NormalTok{(caret)}
+\KeywordTok{library}\NormalTok{(rpart)}
+\KeywordTok{library}\NormalTok{(rpart.plot)}
+\KeywordTok{library}\NormalTok{(cluster)}
+\KeywordTok{library}\NormalTok{(fpc)}
+\KeywordTok{library}\NormalTok{(data.table)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{importing-the-dataset}{%
+\paragraph{\texorpdfstring{Importing the Dataset\\
+}{Importing the Dataset }}\label{importing-the-dataset}}
+
+The \texttt{read.csv()} command is used to import the dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"online_shoppers_intention.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{attach}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+Checking the number of columns and rows of the dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ncol}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 18
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{nrow}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 12330
+\end{verbatim}
+
+Looking at the dataset data structure.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    12330 obs. of  18 variables:
+##  $ Administrative         : int  0 0 0 0 0 0 0 1 0 0 ...
+##  $ Administrative_Duration: num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Informational          : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ Informational_Duration : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ ProductRelated         : int  1 2 1 2 10 19 1 0 2 3 ...
+##  $ ProductRelated_Duration: num  0 64 0 2.67 627.5 ...
+##  $ BounceRates            : num  0.2 0 0.2 0.05 0.02 ...
+##  $ ExitRates              : num  0.2 0.1 0.2 0.14 0.05 ...
+##  $ PageValues             : num  0 0 0 0 0 0 0 0 0 0 ...
+##  $ SpecialDay             : num  0 0 0 0 0 0 0.4 0 0.8 0.4 ...
+##  $ Month                  : Factor w/ 10 levels "Aug","Dec","Feb",..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ OperatingSystems       : int  1 2 4 3 3 2 2 1 2 2 ...
+##  $ Browser                : int  1 2 1 2 3 2 4 2 2 4 ...
+##  $ Region                 : int  1 1 9 2 1 1 3 1 2 1 ...
+##  $ TrafficType            : int  1 2 3 4 4 3 3 5 3 2 ...
+##  $ VisitorType            : Factor w/ 3 levels "New_Visitor",..: 3 3 3 3 3 3 3 3 3 3 ...
+##  $ Weekend                : logi  FALSE FALSE FALSE FALSE TRUE FALSE ...
+##  $ Revenue                : logi  FALSE FALSE FALSE FALSE FALSE FALSE ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(dataset)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Administrative   Administrative_Duration Informational    
+##  Min.   : 0.000   Min.   :   0.00         Min.   : 0.0000  
+##  1st Qu.: 0.000   1st Qu.:   0.00         1st Qu.: 0.0000  
+##  Median : 1.000   Median :   7.50         Median : 0.0000  
+##  Mean   : 2.315   Mean   :  80.82         Mean   : 0.5036  
+##  3rd Qu.: 4.000   3rd Qu.:  93.26         3rd Qu.: 0.0000  
+##  Max.   :27.000   Max.   :3398.75         Max.   :24.0000  
+##                                                            
+##  Informational_Duration ProductRelated   ProductRelated_Duration
+##  Min.   :   0.00        Min.   :  0.00   Min.   :    0.0        
+##  1st Qu.:   0.00        1st Qu.:  7.00   1st Qu.:  184.1        
+##  Median :   0.00        Median : 18.00   Median :  598.9        
+##  Mean   :  34.47        Mean   : 31.73   Mean   : 1194.8        
+##  3rd Qu.:   0.00        3rd Qu.: 38.00   3rd Qu.: 1464.2        
+##  Max.   :2549.38        Max.   :705.00   Max.   :63973.5        
+##                                                                 
+##   BounceRates         ExitRates         PageValues        SpecialDay     
+##  Min.   :0.000000   Min.   :0.00000   Min.   :  0.000   Min.   :0.00000  
+##  1st Qu.:0.000000   1st Qu.:0.01429   1st Qu.:  0.000   1st Qu.:0.00000  
+##  Median :0.003112   Median :0.02516   Median :  0.000   Median :0.00000  
+##  Mean   :0.022191   Mean   :0.04307   Mean   :  5.889   Mean   :0.06143  
+##  3rd Qu.:0.016813   3rd Qu.:0.05000   3rd Qu.:  0.000   3rd Qu.:0.00000  
+##  Max.   :0.200000   Max.   :0.20000   Max.   :361.764   Max.   :1.00000  
+##                                                                          
+##      Month      OperatingSystems    Browser           Region     
+##  May    :3364   Min.   :1.000    Min.   : 1.000   Min.   :1.000  
+##  Nov    :2998   1st Qu.:2.000    1st Qu.: 2.000   1st Qu.:1.000  
+##  Mar    :1907   Median :2.000    Median : 2.000   Median :3.000  
+##  Dec    :1727   Mean   :2.124    Mean   : 2.357   Mean   :3.147  
+##  Oct    : 549   3rd Qu.:3.000    3rd Qu.: 2.000   3rd Qu.:4.000  
+##  Sep    : 448   Max.   :8.000    Max.   :13.000   Max.   :9.000  
+##  (Other):1337                                                    
+##   TrafficType               VisitorType     Weekend         Revenue       
+##  Min.   : 1.00   New_Visitor      : 1694   Mode :logical   Mode :logical  
+##  1st Qu.: 2.00   Other            :   85   FALSE:9462      FALSE:10422    
+##  Median : 2.00   Returning_Visitor:10551   TRUE :2868      TRUE :1908     
+##  Mean   : 4.07                                                            
+##  3rd Qu.: 4.00                                                            
+##  Max.   :20.00                                                            
+## 
+\end{verbatim}
+
+The purchasing intention model is designed as a classification problem
+which measures the purchasers' commitment to finalize purchase intent.
+Hence we have the session data of the users which has two categories :
+users who purchased the item and who didn't. The dataset consists of
+both numerical data and categorical data, and thus the target value is
+categorical. Table 1 refers to the numerical features and Table 2 refers
+to the categorical features used in the prediction model respectively.
+There are a total of 12,330 rows where each row represents session data
+of one particular user.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tab1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"table1.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(tab1) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedleft}X>{\raggedleft}X>{\raggedleft}X}
+\hline
+ï..Feature.Name & Description & Min..value & Max..value & SD\\
+\hline
+Administrative & Number of pages visited by the visitor about account management & 0 & 27.0 & 3.322e+00\\
+\hline
+Administrative duration & Total amount of time (in seconds) spent by the visitor on account management related pages & 0 & 3399.0 & 1.768e+02\\
+\hline
+Informational & Number of pages visited by the visitor about Web site, communication and address information of the shopping site & 0 & 24.0 & 1.270e+00\\
+\hline
+Informational duration & Total amount of time (in seconds) spent by the visitor on informational pages & 0 & 2549.4 & 1.407e+02\\
+\hline
+Product related & Number of pages visited by visitor about product related pages & 0 & 705.0 & 4.448e+01\\
+\hline
+Product related duration & Total amount of time (in seconds) spent by the visitor on product related pages & 0 & 63974.0 & 1.914e+03\\
+\hline
+Bounce rates & Average bounce rate value of the pages visited by the visitor & 0 & 0.2 & 4.849e-02\\
+\hline
+Exit rate & Average exit rate value of the pages visited by the visitor & 0 & 0.2 & 4.860e-02\\
+\hline
+Page value & Average page value of the pages visited by the visitor & 0 & 361.8 & 1.857e+01\\
+\hline
+Special day & Closeness of the site visiting time to a special day & 0 & 1.0 & 1.989e-01\\
+\hline
+\end{tabu}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tab2 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"table2.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(tab2) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ T)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{tabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedleft}X}
+\hline
+ï..Name & Description & Values\\
+\hline
+OperatingSystems & Operating system of the visitor & 8\\
+\hline
+Browser & Browser of the visitor & 13\\
+\hline
+Region & Geographic region from which the session has been started by the visitor & 9\\
+\hline
+TrafficType & Traffic source by which the visitor has arrived at the Web site (e.g., banner, SMS, direct) & 20\\
+\hline
+VisitorType & Visitor type as New Visitor, Returning Visitor, and Other & 3\\
+\hline
+Weekend & Boolean value indicating whether the date of the visit is weekend & 2\\
+\hline
+Month & Month value of the visit date & 10\\
+\hline
+Revenue & Class label indicating whether the visit has been finalized with a transaction & 2\\
+\hline
+\end{tabu}
+
+Taking the look at the \textbf{REVENUE} column which is the target
+column. The datatype of the REVENUE column is Logical which holds the
+value \textbf{TRUE} and \textbf{FALSE}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(gmodels)}
+\KeywordTok{summary}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Mode   FALSE    TRUE 
+## logical   10422    1908
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{CrossTable}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  12330 
+## 
+##  
+##           |     FALSE |      TRUE | 
+##           |-----------|-----------|
+##           |     10422 |      1908 | 
+##           |     0.845 |     0.155 | 
+##           |-----------|-----------|
+## 
+## 
+## 
+## 
+\end{verbatim}
+
+Adding the new \emph{Revenue\_binary} column by using Logical Data of
+Shopper's Revenue into binary dependent variable that will helpful for
+potential regression models. The data will be converted with values 0
+and 1, i.e.~If it is false the value is 0 and if true it will be 1.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset <-}\StringTok{ }\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Revenue_binary =} \KeywordTok{ifelse}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Revenue }\OperatorTok{==}\StringTok{ "TRUE"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+Checking the dataset if it has any missing values.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{colSums}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(dataset))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          Administrative Administrative_Duration           Informational 
+##                       0                       0                       0 
+##  Informational_Duration          ProductRelated ProductRelated_Duration 
+##                       0                       0                       0 
+##             BounceRates               ExitRates              PageValues 
+##                       0                       0                       0 
+##              SpecialDay                   Month        OperatingSystems 
+##                       0                       0                       0 
+##                 Browser                  Region             TrafficType 
+##                       0                       0                       0 
+##             VisitorType                 Weekend                 Revenue 
+##                       0                       0                       0 
+##          Revenue_binary 
+##                       0
+\end{verbatim}
+
+\hypertarget{visualizations}{%
+\paragraph{\texorpdfstring{Visualizations\\
+}{Visualizations }}\label{visualizations}}
+
+\hypertarget{month}{%
+\subparagraph{Month}\label{month}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{Revenue =}\NormalTok{ ..count..}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(dataset), }\DataTypeTok{fill =}\NormalTok{ Revenue) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Frequency"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{m2_files/figure-latex/vis-1.pdf}
+
+The plot describes the frequency of the revenue generated over the
+months.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{table_month =}\StringTok{ }\KeywordTok{table}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Month, dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\NormalTok{tab_mon =}\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{prop.table}\NormalTok{(table_month,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{colnames}\NormalTok{(tab_mon) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Month"}\NormalTok{, }\StringTok{"Revenue"}\NormalTok{, }\StringTok{"perc"}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ tab_mon, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{y =}\NormalTok{ perc, }\DataTypeTok{fill =}\NormalTok{ Revenue)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat =} \StringTok{'identity'}\NormalTok{, }\DataTypeTok{position =} \StringTok{'dodge'}\NormalTok{, }\DataTypeTok{alpha =} \DecValTok{2}\OperatorTok{/}\DecValTok{3}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Month"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Percent"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{m2_files/figure-latex/vis2-1.pdf}
+
+The plot portrays the high shopping rates in the months September,
+October and November with respect to the customers not buying the
+products. These months are comparatively considered as the \emph{Holiday
+Season Months}. Also, there is high hits on the website with positive
+revenue in the month of may.
+
+\hypertarget{visitor}{%
+\subparagraph{Visitor}\label{visitor}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())}
+
+\CommentTok{## setting default parameters for mosaic plots}
+\NormalTok{mosaic_theme =}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{90}\NormalTok{,}
+                                                \DataTypeTok{hjust =} \DecValTok{1}\NormalTok{,}
+                                                \DataTypeTok{vjust =} \FloatTok{0.5}\NormalTok{),}
+                     \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+                     \DataTypeTok{axis.ticks.y =} \KeywordTok{element_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_mosaic}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{product}\NormalTok{(Revenue, VisitorType), }\DataTypeTok{fill =}\NormalTok{ Revenue)) }\OperatorTok{+}
+\StringTok{  }\NormalTok{mosaic_theme }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Visitor Type"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\OtherTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{m2_files/figure-latex/vis3-1.pdf}
+
+The comparison of the VisitorType which are New\_Visitors,
+Returning\_Visitor and Others with Revenue generated. There are many
+returning visitors in the contrast to less new visitors. Although, the
+new visitors have high probablity of purchasing the product and help the
+revenue than the returning visitors.
+
+\hypertarget{weekend}{%
+\subparagraph{Weekend}\label{weekend}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{CrossTable}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Weekend, dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+##  
+##    Cell Contents
+## |-------------------------|
+## |                       N |
+## | Chi-square contribution |
+## |           N / Row Total |
+## |           N / Col Total |
+## |         N / Table Total |
+## |-------------------------|
+## 
+##  
+## Total Observations in Table:  12330 
+## 
+##  
+##                 | dataset$Revenue 
+## dataset$Weekend |     FALSE |      TRUE | Row Total | 
+## ----------------|-----------|-----------|-----------|
+##           FALSE |      8053 |      1409 |      9462 | 
+##                 |     0.381 |     2.080 |           | 
+##                 |     0.851 |     0.149 |     0.767 | 
+##                 |     0.773 |     0.738 |           | 
+##                 |     0.653 |     0.114 |           | 
+## ----------------|-----------|-----------|-----------|
+##            TRUE |      2369 |       499 |      2868 | 
+##                 |     1.257 |     6.864 |           | 
+##                 |     0.826 |     0.174 |     0.233 | 
+##                 |     0.227 |     0.262 |           | 
+##                 |     0.192 |     0.040 |           | 
+## ----------------|-----------|-----------|-----------|
+##    Column Total |     10422 |      1908 |     12330 | 
+##                 |     0.845 |     0.155 |           | 
+## ----------------|-----------|-----------|-----------|
+## 
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\NormalTok{mosaic_theme }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_mosaic}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{product}\NormalTok{(Revenue,Weekend), }\DataTypeTok{fill =}\NormalTok{ Revenue)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Weekend"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\OtherTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{m2_files/figure-latex/weekend-1.pdf}
+
+The \textbf{Weekend} analysis shows that more than 70\% of visitors are
+visiting the site on weekdays, with 15\% chance of actually buying the
+products. The rest 30\% visit on the weekend and there is 17\%
+speculation of buying.
+
+\hypertarget{appendixcode}{%
+\section{Appendix---Code}\label{appendixcode}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\OperatorTok{::}\NormalTok{opts_chunk}\OperatorTok{$}\KeywordTok{set}\NormalTok{(}\DataTypeTok{echo=} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{warning=}\OtherTok{FALSE}\NormalTok{, }\DataTypeTok{message=}\OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(gmodels)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(ggmosaic)}
+\KeywordTok{library}\NormalTok{(corrplot)}
+\KeywordTok{library}\NormalTok{(caret)}
+\KeywordTok{library}\NormalTok{(rpart)}
+\KeywordTok{library}\NormalTok{(rpart.plot)}
+\KeywordTok{library}\NormalTok{(cluster)}
+\KeywordTok{library}\NormalTok{(fpc)}
+\KeywordTok{library}\NormalTok{(data.table)}
+\KeywordTok{library}\NormalTok{(knitr)}
+\KeywordTok{library}\NormalTok{(kableExtra)}
+\NormalTok{dataset <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"online_shoppers_intention.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{attach}\NormalTok{(dataset)}
+\KeywordTok{ncol}\NormalTok{(dataset)}
+\KeywordTok{nrow}\NormalTok{(dataset)}
+\KeywordTok{str}\NormalTok{(dataset)}
+\KeywordTok{summary}\NormalTok{(dataset)}
+\NormalTok{tab1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"table1.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(tab1) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ T)}
+\NormalTok{tab2 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"table2.csv"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\KeywordTok{kable}\NormalTok{(tab2) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{kable_styling}\NormalTok{(}\DataTypeTok{full_width =}\NormalTok{ T)}
+\KeywordTok{library}\NormalTok{(gmodels)}
+\KeywordTok{summary}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\KeywordTok{CrossTable}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\NormalTok{dataset <-}\StringTok{ }\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{Revenue_binary =} \KeywordTok{ifelse}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Revenue }\OperatorTok{==}\StringTok{ "TRUE"}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{))}
+\KeywordTok{colSums}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(dataset))}
+\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{Revenue =}\NormalTok{ ..count..}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(dataset), }\DataTypeTok{fill =}\NormalTok{ Revenue) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Frequency"}\NormalTok{)}
+\NormalTok{table_month =}\StringTok{ }\KeywordTok{table}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Month, dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\NormalTok{tab_mon =}\StringTok{  }\KeywordTok{as.data.frame}\NormalTok{(}\KeywordTok{prop.table}\NormalTok{(table_month,}\DecValTok{2}\NormalTok{))}
+\KeywordTok{colnames}\NormalTok{(tab_mon) =}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Month"}\NormalTok{, }\StringTok{"Revenue"}\NormalTok{, }\StringTok{"perc"}\NormalTok{)}
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ tab_mon, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Month, }\DataTypeTok{y =}\NormalTok{ perc, }\DataTypeTok{fill =}\NormalTok{ Revenue)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{stat =} \StringTok{'identity'}\NormalTok{, }\DataTypeTok{position =} \StringTok{'dodge'}\NormalTok{, }\DataTypeTok{alpha =} \DecValTok{2}\OperatorTok{/}\DecValTok{3}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Month"}\NormalTok{)}\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Percent"}\NormalTok{)}
+\KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_bw}\NormalTok{())}
+
+\CommentTok{## setting default parameters for mosaic plots}
+\NormalTok{mosaic_theme =}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{axis.text.x =} \KeywordTok{element_text}\NormalTok{(}\DataTypeTok{angle =} \DecValTok{90}\NormalTok{,}
+                                                \DataTypeTok{hjust =} \DecValTok{1}\NormalTok{,}
+                                                \DataTypeTok{vjust =} \FloatTok{0.5}\NormalTok{),}
+                     \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+                     \DataTypeTok{axis.ticks.y =} \KeywordTok{element_blank}\NormalTok{())}
+\NormalTok{dataset }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_mosaic}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{product}\NormalTok{(Revenue, VisitorType), }\DataTypeTok{fill =}\NormalTok{ Revenue)) }\OperatorTok{+}
+\StringTok{  }\NormalTok{mosaic_theme }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Visitor Type"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\OtherTok{NULL}\NormalTok{)}
+\KeywordTok{CrossTable}\NormalTok{(dataset}\OperatorTok{$}\NormalTok{Weekend, dataset}\OperatorTok{$}\NormalTok{Revenue)}
+\NormalTok{dataset }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\NormalTok{mosaic_theme }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_mosaic}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{product}\NormalTok{(Revenue,Weekend), }\DataTypeTok{fill =}\NormalTok{ Revenue)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Weekend"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\OtherTok{NULL}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\end{document}

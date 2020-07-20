@@ -1,0 +1,9 @@
+﻿Name,Description,Values
+OperatingSystems,Operating system of the visitor,8
+Browser,Browser of the visitor,13
+Region,Geographic region from which the session has been started by the visitor,9
+TrafficType,"Traffic source by which the visitor has arrived at the Web site (e.g., banner, SMS, direct)",20
+VisitorType,"Visitor type as New Visitor, Returning Visitor, and Other",3
+Weekend,Boolean value indicating whether the date of the visit is weekend,2
+Month,Month value of the visit date,10
+Revenue,Class label indicating whether the visit has been finalized with a transaction,2

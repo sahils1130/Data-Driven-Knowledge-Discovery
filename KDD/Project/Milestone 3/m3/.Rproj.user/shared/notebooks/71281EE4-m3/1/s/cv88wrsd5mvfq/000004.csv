@@ -1,0 +1,6 @@
+"0","dataset$Month = factor(dataset$Month, levels = month.abb)"
+"0","dataset %>%"
+"0","  ggplot() + "
+"0","  aes(x = Month, Revenue = ..count../nrow(dataset), fill = Revenue) +"
+"0","  geom_bar() +"
+"0","  ylab(""Frequency"")"

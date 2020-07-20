@@ -1,0 +1,5 @@
+"0","log.prob1 = predict(log.fit2, df, type = ""response"")"
+"0","log.pred1 = ifelse(log.prob1>0.52, 1, 0)"
+"0","df.neg1 = df[log.pred1 == 0, ]"
+"0","df.pos1 = df[log.pred1 == 1, ]"
+"0","plot(df.pos1$x1, df.pos1$x2, col = ""blue"", xlab = ""X1"", ylab = ""X2"")"

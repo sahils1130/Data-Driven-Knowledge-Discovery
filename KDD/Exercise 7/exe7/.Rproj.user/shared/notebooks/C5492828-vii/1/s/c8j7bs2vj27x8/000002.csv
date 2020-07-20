@@ -1,0 +1,8 @@
+"0","library(ISLR)"
+"0","attach(Carseats)"
+"2","The following objects are masked from Carseats (pos = 3):
+
+    Advertising, Age, CompPrice, Education, Income, Population, Price, Sales,
+    ShelveLoc, Urban, US
+
+"

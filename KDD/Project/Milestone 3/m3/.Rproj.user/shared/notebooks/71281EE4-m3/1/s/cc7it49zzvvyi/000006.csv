@@ -1,0 +1,7 @@
+"0","table_month = table(dataset$Month, dataset$Revenue)"
+"0","tab_mon =  as.data.frame(prop.table(table_month,2))"
+"0","colnames(tab_mon) = c(""Month"", ""Revenue"", ""perc"")"
+"0","ggplot(data = tab_mon, aes(x = Month, y = perc, fill = Revenue)) + "
+"0","  geom_bar(stat = 'identity', position = 'dodge', alpha = 2/3) + "
+"0","  xlab(""Month"")+"
+"0","  ylab(""Percent"")"

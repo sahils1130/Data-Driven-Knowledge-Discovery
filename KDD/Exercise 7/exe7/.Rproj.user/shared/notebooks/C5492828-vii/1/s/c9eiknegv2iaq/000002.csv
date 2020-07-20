@@ -1,0 +1,4 @@
+"0","set.seed(123)"
+"0","train <- sample(1:nrow(Carseats), nrow(Carseats) / 2)"
+"0","Carseats.train <- Carseats[train, ]"
+"0","Carseats.test <- Carseats[-train, ]"

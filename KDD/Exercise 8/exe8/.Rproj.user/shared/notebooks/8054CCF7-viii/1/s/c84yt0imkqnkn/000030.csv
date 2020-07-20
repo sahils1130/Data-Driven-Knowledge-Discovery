@@ -1,0 +1,30 @@
+"0","library(e1071)"
+"0","tune.out <- tune(svm, y ~ ., data = df, kernel = ""linear"", "
+"0","                 ranges = list(cost = c(0.001, 0.01, 0.1, 1, 5, 10, 100, 1000)))"
+"2","
+WARNING: reaching max number of iterations
+"
+"2","
+WARNING: reaching max number of iterations
+"
+"2","
+WARNING: reaching max number of iterations
+"
+"0","summary(tune.out)"
+"1","
+Parameter tuning of "
+"1",""
+"1","‘svm’"
+"1",""
+"1",":
+
+"
+"1","- sampling method:"
+"1"," "
+"1","10-fold cross validation"
+"1"," "
+"1","
+
+"
+"1","- best parameters:
+"

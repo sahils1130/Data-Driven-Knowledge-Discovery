@@ -1,0 +1,330 @@
+---
+title: 'Analysis of Online Shoppers’ Purchase Intention'
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "6/23/2020"
+header-includes:
+    - \usepackage{bbm}
+    - \usepackage{booktabs}
+    - \usepackage{sectsty} 
+      \allsectionsfont{\centering}
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(echo= TRUE, warning=FALSE, message=FALSE)
+```
+
+\allsectionsfont{\centering}
+# Milestone 1: Project Proposal 
+
+\allsectionsfont{\raggedright}
+## Problem Definition
+In the era of online shopping, known as e-shopping, people use online transactions to buy the items they need while exploring it online. This helps the buyers as well as sellers to understand the patterns, intentions, and behavior of various online customers. Thereby, helping businesses improve their revenue by focusing on customer experiences and marketing. Hence, the analysis of online shoppers’ purchase intention has become an emerging field in data mining. Click-stream analysis refers to the online shoppers’ behavior analysis as they invoke a sequence of web pages in a particular session. Therefore, analyzing this data is a primary goal for successful online businesses as they extract the clicks and behavior through web page requests. Our proposed solution is to provide a decisive and feasible recommendation algorithm that will allow us to predict the behavior of the shoppers’.
+
+## System Funtionality
+Firstly, we will build the model and analyze the performance of various classification algorithms such as Decision Tree, Random Forest, Support Vector Machine (SVM), and Naive Bayes. Then, the values of different evaluation metrics like Accuracy, Precision, Recall, F-score will be calculated to compare the performance of each of the algorithms. Lastly, we also plan on using these classification models to predict the shopper’s intentions.
+
+## Requirements and Benefits
+In today’s economy e-commerce is becoming more extensive and businesses within this sector need to understand, the factors which come into play when a shopper ventures into a website to make a purchase. The benefit this holds is that it will enable the websites to better target ads or other factors which may lead to an increase in sales. These findings support the feasibility of accurate and scalable purchasing intention prediction for virtual shopping environments. This also helps in knowing the market capabilities of the brand when released in the new market while finding out the problems in the existing market and helps in relevant marketing strategies that can help in conquering the market.
+  
+## Dataset Details and Core Algorithm
+
+  The dataset which is used is based on the [“Online Shoppers Purchasing Intention”](https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset) UCI dataset. It consists of numerical as well as categorical data. There are a total of 12,330 records where each row corresponds to the session data of the particular user. The total no. of records for which the session ended without any purchase is 10,442 which contributes to 84.5%. 
+The core algorithm which we will be implementing is a Decision Tree. Being a classification algorithm, it creates a tree-like structure by creating rules for breaking the dataset into small subsets in each step. We create a training model that is used to predict the class of the variable by simply learning decision rules deduced from the training set. At each step, a decision is taken to classify the data in the beneath classes. The leaf node holds the final results. 
+
+\allsectionsfont{\centering}
+# Milestone 2: Data Summary/visualization 
+  
+The dataset used in the project is based on [*"online shoppers purchasing intention"*](https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset) available on UCI Machine Learning dataset.
+
+<!-- #### Install Packages -->
+
+<!-- remove the comments to install the packages if they aren't installed -->
+
+<!-- ```{r install} -->
+<!-- # install.packages("ggplot2") -->
+<!-- # install.packages("tidyverse") -->
+<!-- # install.packages("gmodels") -->
+<!-- # install.packages("dplyr") -->
+<!-- # install.packages("ggmosaic") -->
+<!-- # install.packages("corrplot") -->
+<!-- # install.packages("caret") -->
+<!-- # install.packages("rpart") -->
+<!-- # install.packages("rpart.plot") -->
+<!-- # install.packages("cluster") -->
+<!-- # install.packages("fpc") -->
+<!-- # install.packages("data.table") -->
+<!-- ``` -->
+
+\allsectionsfont{\raggedright}
+### Importing Libraries \
+
+This are the important libraries that are to be installed for the execution of the file.
+
+```{r libraries}
+library(ggplot2)
+library(tidyverse)
+library(gmodels)
+library(dplyr)
+library(ggmosaic)
+library(corrplot)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(cluster)
+library(fpc)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(plyr)
+library(caTools)
+```
+
+### Importing the Dataset \
+
+The `read.csv()` command is used to import the dataset.
+
+```{r dataset}
+dataset <- read.csv("online_shoppers_intention.csv", header = TRUE)
+attach(dataset)
+```
+
+Checking the number of columns and rows of the dataset.
+
+```{r colsandrows}
+ncol(dataset)
+nrow(dataset)
+```
+
+Looking at the dataset data structure.
+
+```{r datastructure}
+str(dataset)
+summary(dataset)
+```
+
+The purchasing intention model is designed as a classification problem which measures the purchasers’ commitment to finalize purchase intent. Hence we have the session data of the users which has two categories : users who purchased the item and who didn’t. The dataset consists of both numerical data and categorical data, and thus the target value is categorical. Table 1 refers to the numerical features and Table 2 refers to the categorical features used in the prediction model respectively. There are a total of 12,330 rows where each row represents session data of one particular user.
+
+```{r table2}
+tab1 <- read.csv("table1.csv", header = TRUE)
+kable(tab1) %>%
+  kable_styling(full_width = T)
+tab2 <- read.csv("table2.csv", header = TRUE)
+kable(tab2) %>%
+  kable_styling(full_width = T)
+```
+
+Taking the look at the **REVENUE** column which is the target column. The datatype of the REVENUE column is Logical which holds the value **TRUE** and **FALSE**.
+
+```{r revenue}
+library(gmodels)
+summary(dataset$Revenue)
+CrossTable(dataset$Revenue)
+```
+
+Adding the new *Revenue_binary* column by using Logical Data of Shopper's Revenue into binary dependent variable that will helpful for potential regression models. The data will be converted with values 0 and 1, i.e. If it is false the value is 0 and if true it will be 1.
+
+```{r binary}
+dataset <- dataset %>%
+  mutate(Revenue_binary = ifelse(dataset$Revenue == "TRUE", 1, 0))
+```
+
+Checking the dataset if it has any missing values.
+
+```{r missing}
+colSums(is.na(dataset))
+```
+
+### Visualizations \
+
+### Month
+
+```{r vis}
+dataset$Month = factor(dataset$Month, levels = month.abb)
+dataset %>%
+  ggplot() + 
+  aes(x = Month, Revenue = ..count../nrow(dataset), fill = Revenue) +
+  geom_bar() +
+  ylab("Frequency")
+```
+
+The plot describes the frequency of the revenue generated over the months.
+
+```{r vis2}
+table_month = table(dataset$Month, dataset$Revenue)
+tab_mon =  as.data.frame(prop.table(table_month,2))
+colnames(tab_mon) = c("Month", "Revenue", "perc")
+ggplot(data = tab_mon, aes(x = Month, y = perc, fill = Revenue)) + 
+  geom_bar(stat = 'identity', position = 'dodge', alpha = 2/3) + 
+  xlab("Month")+
+  ylab("Percent")
+```
+
+The plot portrays the high shopping rates in the months September, October and November with respect to the customers not buying the products. These months are comparatively considered as the *Holiday Season Months*. Also, there is high hits on the website with positive revenue in the month of may.
+
+### Visitor
+
+```{r themesetup}
+theme_set(theme_bw())
+
+## setting default parameters for mosaic plots
+mosaic_theme = theme(axis.text.x = element_text(angle = 90,
+                                                hjust = 1,
+                                                vjust = 0.5),
+                     axis.text.y = element_blank(),
+                     axis.ticks.y = element_blank())
+```
+
+```{r vis3}
+dataset %>% 
+  ggplot() +
+  geom_mosaic(aes(x = product(Revenue, VisitorType), fill = Revenue)) +
+  mosaic_theme +
+  xlab("Visitor Type") +
+  ylab(NULL)
+```
+
+The comparison of the VisitorType which are New_Visitors, Returning_Visitor and Others with Revenue generated. There are many returning visitors in the contrast to less new visitors. Although, the new visitors have high probablity of purchasing the product and help the revenue than the returning visitors.
+
+### Weekend
+
+```{r weekend}
+CrossTable(dataset$Weekend, dataset$Revenue)
+dataset %>%
+  ggplot() +
+  mosaic_theme +
+  geom_mosaic(aes(x = product(Revenue,Weekend), fill = Revenue)) +
+  xlab("Weekend") +
+  ylab(NULL)
+```
+
+The **Weekend** analysis shows that more than 70% of visitors are visiting the site on weekdays, with 15% chance of actually buying the products. The rest 30% visit on the weekend and there is 17% speculation of buying.
+
+\allsectionsfont{\centering}
+# Milestone 3: Algorithm Testing 
+
+Currently we are implemented two classification algorithms Decision Tree and K-Nearest Neighbors
+and achieved really good accuracies in both of them. In the next milestone we are planning to implement naive bayes and SVM.
+
+### Decision Tree
+
+Now preparing the dataset for the classification algorithms. Splitting the dataset into testing and training data for training the model. We will split the data in ratio 80:20.
+
+```{r dtdata}
+dataset_classify = dataset[-c(19:22)]
+set.seed(123)
+split = sample.split(dataset_classify$Revenue, SplitRatio = 0.8)
+training_data = subset(dataset_classify, split == TRUE)
+test_data = subset(dataset_classify, split == FALSE)
+```
+
+Running the decision tree from the "rpart" library:
+
+```{r dtmodel}
+dt_model<- rpart(Revenue ~ . , data = training_data, method="class")
+rpart.plot(dt_model)
+```
+
+The predictive model suggests that Page Values greater than 0.94 lead to a TRUE 57% of the time. On top of this, an effective Bounce Rate above 0 improves our TRUE to 73% and Administrative type ‘5’ or below result in a TRUE 83% of the time. Also, we see that October and November are good months for shoppers’ conversions.
+
+```{r dttrain}
+dt.pred <- predict(dt_model,test_data,type = "class")
+mean(dt.pred==test_data$Revenue)
+```
+
+Confusion Matrix for Decision Tree
+
+```{r cfdt}
+cfdt<-table(dt.pred,test_data$Revenue)
+cfdt
+```
+
+Accuracy measures for Decision Tree:
+
+```{r preandrecallcffscore}
+dt_precision<- cfdt[1,1]/(sum(cfdt[1,]))
+dt_recall<- cfdt[1,1]/(sum(cfdt[,1]))
+dt_fscore <- 2*dt_precision*dt_recall/(dt_precision+dt_recall)
+dt_precision
+dt_recall
+dt_fscore
+```
+
+### KNN
+
+Firstly, we have to prepare the data for analysis. The data preprocessing has to be done before we run any machine learning algorithm. The data preprocessing includes the preparation of the data converting from categorical data to ordinal factors. Creating Binary variables for the *Weekend* column for False as '0' and True as '1'.
+
+Running the KNN algorithm from the "class" package:
+
+```{r knndata}
+dataset_knn <- dataset[c(1:17,19)]
+dataset_knn$OperatingSystems <- factor(dataset$OperatingSystems,
+                                   order = TRUE,
+                                   levels = c(6,3,7,1,5,2,4,8))
+dataset_knn$Browser <- factor(dataset$Browser,
+                          order = TRUE,
+                          levels = c(9,3,6,7,1,2,8,11,4,5,10,13,12))
+dataset_knn$Region <- factor(dataset$Region,
+                         order = TRUE,
+                         levels = c(8,6,3,4,7,1,5,2,9))
+dataset_knn$TrafficType <- factor(dataset$TrafficType,
+                              order = TRUE,
+                              levels = c(12,15,17,18,13,19,3,9,1,6,4,14,11,10,5,2,20,8,7,16))
+dataset_knn$Month <- factor(dataset$Month,
+                        levels = c('Feb', 'Mar', 'May',
+                                   'Jun','Jul','Aug','Sep','Oct','Nov','Dec'),
+                        labels = c(2,3,5,6,7,8,9,10,11,12))
+dataset_knn$VisitorType<- factor(dataset$VisitorType,
+                                      levels = c('Returning_Visitor', 'Other', 'New_Visitor'),
+                                      labels = c(1,2,3))
+dataset_knn$Weekend <- factor(dataset$Weekend,
+                              levels = c('TRUE','FALSE'),
+                              labels = c(1,0))
+```
+
+Splitting the data for the testing and training data in the ratio 80:20 for the KNN.
+
+```{r splitknn}
+set.seed(1233)
+splitknn = sample.split(dataset_knn$Revenue_binary, SplitRatio = 0.8)
+training_data_knn = subset(dataset_knn, split == TRUE)
+test_data_knn = subset(dataset_knn, split == FALSE)
+```
+
+Bulding the KNN classifier as the y_pred
+
+```{r normalise}
+library(class)
+y_pred = knn(train = training_data_knn[, -18],
+             test = test_data_knn[, -18],
+             cl = training_data_knn[, 18],
+             k = 5,
+             prob = TRUE)
+
+```
+
+Building the Confusion Matrix for the K-Nearest Neighbor
+
+```{r cfknn}
+cm = table(test_data_knn[, 18], y_pred)
+cm
+```
+
+Precision, Recall and F-score for KNN
+
+```{r kpcknn}
+knn_precision<- cm[1,1]/(sum(cm[1,]))
+knn_recall<- cm[1,1]/(sum(cm[,1]))
+knn_fscore <- 2*knn_precision*knn_recall/(knn_precision+knn_recall)
+knn_precision
+knn_recall
+knn_fscore
+```
+
+# Appendix---Code
+
+```{r ref.label=knitr::all_labels(), echo = T, eval = F}
+```
