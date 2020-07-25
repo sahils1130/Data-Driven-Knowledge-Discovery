@@ -1,0 +1,554 @@
+---
+title: 'Analysis of Online Shoppers’ Purchase Intention'
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "7/20/2020"
+header-includes:
+    - \usepackage{bbm}
+    - \usepackage{booktabs}
+    - \usepackage{sectsty} 
+      \allsectionsfont{\centering}
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r global_options, echo=FALSE}
+knitr::opts_chunk$set(echo= TRUE, warning=FALSE, message=FALSE)
+```
+
+\allsectionsfont{\centering}
+# Milestone 1: Project Proposal 
+
+\allsectionsfont{\raggedright}
+## Problem Definition
+In the era of online shopping, known as e-shopping, people use online transactions to buy the items they need while exploring it online. This helps the buyers as well as sellers to understand the patterns, intentions, and behavior of various online customers. Thereby, helping businesses improve their revenue by focusing on customer experiences and marketing. Hence, the analysis of online shoppers’ purchase intention has become an emerging field in data mining. Click-stream analysis refers to the online shoppers’ behavior analysis as they invoke a sequence of web pages in a particular session. Therefore, analyzing this data is a primary goal for successful online businesses as they extract the clicks and behavior through web page requests. Our proposed solution is to provide a decisive and feasible recommendation algorithm that will allow us to predict the behavior of the shoppers’.
+
+## System Funtionality
+Firstly, we will build the model and analyze the performance of various classification, Regression and Clustering Algorithms. Which includes Logistic Regression, Decision Tree, K-Means Clustering and K-NN Classification. Then, the values of different evaluation metrics like Accuracy, Precision, Recall, F-score will be calculated to compare the performance of each of the algorithms. Lastly, we also plan on using these models to predict the shopper’s intentions.
+
+## Requirements and Benefits
+In today’s economy e-commerce is becoming more extensive and businesses within this sector need to understand, the factors which come into play when a shopper ventures into a website to make a purchase. The benefit this holds is that it will enable the websites to better target ads or other factors which may lead to an increase in sales. These findings support the feasibility of accurate and scalable purchasing intention prediction for virtual shopping environments. This also helps in knowing the market capabilities of the brand when released in the new market while finding out the problems in the existing market and helps in relevant marketing strategies that can help in conquering the market.
+  
+## Dataset Details and Core Algorithm
+
+  The dataset which is used is based on the [“Online Shoppers Purchasing Intention”](https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset) UCI dataset. It consists of numerical as well as categorical data. There are a total of 12,330 records where each row corresponds to the session data of the particular user. The total no. of records for which the session ended without any purchase is 10,442 which contributes to 84.5%. 
+The core algorithm which we will be implementing is a Decision Tree. Being a classification algorithm, it creates a tree-like structure by creating rules for breaking the dataset into small subsets in each step. We create a training model that is used to predict the class of the variable by simply learning decision rules deduced from the training set. At each step, a decision is taken to classify the data in the beneath classes. The leaf node holds the final results. 
+
+\allsectionsfont{\centering}
+# Milestone 2: Data Summary/visualization 
+  
+The dataset used in the project is based on [*"online shoppers purchasing intention"*](https://archive.ics.uci.edu/ml/datasets/Online+Shoppers+Purchasing+Intention+Dataset) available on UCI Machine Learning dataset.
+
+<!-- #### Install Packages -->
+
+<!-- remove the comments to install the packages if they aren't installed -->
+
+<!-- ```{r install} -->
+<!-- # install.packages("ggplot2") -->
+<!-- # install.packages("tidyverse") -->
+<!-- # install.packages("gmodels") -->
+<!-- # install.packages("dplyr") -->
+<!-- # install.packages("ggmosaic") -->
+<!-- # install.packages("corrplot") -->
+<!-- # install.packages("caret") -->
+<!-- # install.packages("rpart") -->
+<!-- # install.packages("rpart.plot") -->
+<!-- # install.packages("cluster") -->
+<!-- # install.packages("fpc") -->
+<!-- # install.packages("data.table") -->
+<!-- ``` -->
+
+\allsectionsfont{\raggedright}
+### Importing Libraries \
+
+This are the important libraries that are to be installed for the execution of the file.
+
+```{r libraries}
+library(ggplot2)
+library(tidyverse)
+library(gmodels)
+library(dplyr)
+library(ggmosaic)
+library(corrplot)
+library(caret)
+library(rpart)
+library(rpart.plot)
+library(cluster)
+library(fpc)
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(plyr)
+library(caTools)
+```
+
+### Importing the Dataset \
+
+The `read.csv()` command is used to import the dataset.
+
+```{r dataset}
+dataset <- read.csv("online_shoppers_intention.csv", header = TRUE)
+attach(dataset)
+```
+
+Checking the number of columns and rows of the dataset.
+
+```{r colsandrows}
+ncol(dataset)
+nrow(dataset)
+```
+
+Looking at the dataset data structure.
+
+```{r datastructure}
+str(dataset)
+summary(dataset)
+```
+
+The purchasing intention model is designed as a classification problem which measures the purchasers’ commitment to finalize purchase intent. Hence we have the session data of the users which has two categories : users who purchased the item and who didn’t. The dataset consists of both numerical data and categorical data, and thus the target value is categorical. Table 1 refers to the numerical features and Table 2 refers to the categorical features used in the prediction model respectively. There are a total of 12,330 rows where each row represents session data of one particular user.
+
+```{r table2}
+tab1 <- read.csv("table1.csv", header = TRUE)
+kable(tab1) %>%
+  kable_styling(full_width = T)
+tab2 <- read.csv("table2.csv", header = TRUE)
+kable(tab2) %>%
+  kable_styling(full_width = T)
+```
+
+Taking the look at the **REVENUE** column which is the target column. The datatype of the REVENUE column is Logical which holds the value **TRUE** and **FALSE**.
+
+```{r revenue}
+library(gmodels)
+summary(dataset$Revenue)
+CrossTable(dataset$Revenue)
+```
+
+Adding the new *Revenue_binary* column by using Logical Data of Shopper's Revenue into binary dependent variable that will helpful for potential regression models. The data will be converted with values 0 and 1, i.e. If it is false the value is 0 and if true it will be 1.
+
+```{r binary}
+datasetbinary <- dataset %>%
+  mutate(Revenue_binary = ifelse(dataset$Revenue == "TRUE", 1, 0))
+```
+
+Checking the dataset if it has any missing values. Even if it has we will remove it.
+
+```{r missing}
+# colSums(is.na(dataset))
+sum(is.na(dataset))
+sapply(dataset, function(x) sum(is.na(x)))
+dataset <- na.omit(dataset)
+```
+
+### Visualizations \
+
+### Month
+
+```{r vis}
+dataset$Month = factor(dataset$Month, levels = month.abb)
+dataset %>%
+  ggplot() + 
+  aes(x = Month, Revenue = ..count../nrow(dataset), fill = Revenue) +
+  geom_bar() +
+  ylab("Frequency")
+```
+
+The plot describes the frequency of the revenue generated over the months.
+
+```{r vis2}
+table_month = table(dataset$Month, dataset$Revenue)
+tab_mon =  as.data.frame(prop.table(table_month,2))
+colnames(tab_mon) = c("Month", "Revenue", "perc")
+ggplot(data = tab_mon, aes(x = Month, y = perc, fill = Revenue)) + 
+  geom_bar(stat = 'identity', pdatasettion = 'dodge', alpha = 2/3) + 
+  xlab("Month")+
+  ylab("Percent")
+```
+
+The plot portrays the high shopping rates in the months September, October and November with respect to the customers not buying the products. These months are comparatively considered as the *Holiday Season Months*. Also, there is high hits on the website with pdatasettive revenue in the month of may.
+
+### Visitor
+
+```{r themesetup}
+theme_set(theme_bw())
+
+## setting default parameters for mosaic plots
+mosaic_theme = theme(axis.text.x = element_text(angle = 90,
+                                                hjust = 1,
+                                                vjust = 0.5),
+                     axis.text.y = element_blank(),
+                     axis.ticks.y = element_blank())
+```
+
+```{r vis3}
+dataset %>% 
+  ggplot() +
+  geom_mosaic(aes(x = product(Revenue, VisitorType), fill = Revenue)) +
+  mosaic_theme +
+  xlab("Visitor Type") +
+  ylab(NULL)
+```
+
+The comparison of the VisitorType which are New_Visitors, Returning_Visitor and Others with Revenue generated. There are many returning visitors in the contrast to less new visitors. Although, the new visitors have high probablity of purchasing the product and help the revenue than the returning visitors.
+
+### Weekend
+
+```{r weekend}
+CrossTable(dataset$Weekend, dataset$Revenue)
+dataset %>%
+  ggplot() +
+  mosaic_theme +
+  geom_mosaic(aes(x = product(Revenue,Weekend), fill = Revenue)) +
+  xlab("Weekend") +
+  ylab(NULL)
+```
+
+The **Weekend** analysis shows that more than 70% of visitors are visiting the site on weekdays, with 15% chance of actually buying the products. The rest 30% visit on the weekend and there is 17% speculation of buying.
+
+\allsectionsfont{\centering}
+# Milestone 3: Algorithm Testing 
+
+Data preparation for the algorithms testing, looking up for the features who has too many levels and transforming some feature with `as.factor()` function for easier execution.
+
+```{r levels}
+dataset$Revenue <- as.factor(dataset$Revenue)
+dataset$VisitorType <- as.factor(dataset$VisitorType)
+dataset$TrafficType <- as.factor(dataset$TrafficType)
+dataset$OperatingSystems <- as.factor(dataset$OperatingSystems)
+dataset$Browser <- as.factor(dataset$Browser)
+dataset$Region <- as.factor(dataset$Region)
+dataset$Month <- as.factor(dataset$Month)
+summary(dataset$Browser)
+summary(dataset$TrafficType)
+dataset$Browser = recode(dataset$Browser, '3' = '1')
+dataset$Browser = recode(dataset$Browser, '4' = '1')
+dataset$Browser = recode(dataset$Browser, '5' = '1')
+dataset$Browser = recode(dataset$Browser, '6' = '1')
+dataset$Browser = recode(dataset$Browser, '7' = '1')
+dataset$Browser = recode(dataset$Browser, '8' = '1')
+dataset$Browser = recode(dataset$Browser, '9' = '1')
+dataset$Browser = recode(dataset$Browser, '10' = '1')
+dataset$Browser = recode(dataset$Browser, '11' = '1')
+dataset$Browser = recode(dataset$Browser, '12' = '1')
+dataset$Browser = recode(dataset$Browser, '13' = '1')
+dataset$TrafficType = recode(dataset$TrafficType, '6' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '7' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '8' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '9' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '10' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '11' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '12' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '13' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '14' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '15' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '16' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '17' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '18' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '19' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '20' = '5')
+dataset$TrafficType = recode(dataset$TrafficType, '4' = '3')
+dataset$TrafficType = recode(dataset$TrafficType, '5' = '4')
+summary(dataset$Browser)
+summary(dataset$TrafficType)
+```
+
+### Logistic Regression
+In this section we are implementing Logistic Regression,Data Preparing for the logistic regression and splitting the in the ratio 75:25. Also preprocessing the data with `preProcess()` function and also feature scaling the data to get better results for the algorithm.
+
+```{r logdata}
+dataset_logistic <- dataset
+set.seed(123)
+split_log = createDataPartition(dataset_logistic$Revenue, p=0.75, list = FALSE, times = 1)
+training_log = dataset_logistic[split_log,]
+test_log = dataset_logistic[-split_log,]
+preprocess_log <- preProcess(training_log, method = c("center", "scale"))
+train_pre_log <- predict(preprocess_log, training_log)
+test_pre_log <- predict(preprocess_log, test_log)
+```
+
+Building the Logistic Model with `glm()` function on the *Revenue* feature as the dependent variable.
+
+```{r logistic}
+set.seed(123)
+log_reg <- glm(Revenue ~ ., data = train_pre_log,family = binomial)
+summary(log_reg)
+```
+
+The building of the logistic regression model, we can see that for the dataset, most significant features with respect to the Revenue are Exit Rates, Page Values, and Month of November. 
+
+Now Implementing the model on the test dataset to test out the accuracy of the Logistic Model.
+
+```{r logpred}
+log_reg_pred <- predict(log_reg, newdata = test_pre_log, type = "response")
+log_reg_pred <- ifelse(log_reg_pred>0.5,"TRUE","FALSE")
+logcf <- table(log_reg_pred, test_pre_log$Revenue)
+confusionMatrix(logcf)
+```
+
+We got nearly 89% of accuracy in the Logistic regression model. We got good analysis running the Logistic Regression Model.
+
+### Decision Tree
+
+Now preparing the dataset for the decision tree classification algorithm. Splitting the dataset into testing and training data for training the model. We will split the data in ratio 75:25.
+
+```{r dtdata}
+dataset_classify = dataset
+set.seed(123)
+split = sample.split(dataset_classify$Revenue, SplitRatio = 0.75)
+training_data = subset(dataset_classify, split == TRUE)
+test_data = subset(dataset_classify, split == FALSE)
+```
+
+Running the decision tree from the `rpart()` library:
+
+```{r dtmodel}
+dt_model<- rpart(Revenue ~ . , data = training_data, method="class")
+rpart.plot(dt_model)
+```
+
+The predictive model suggests that Page Values greater than 0.94 lead to a TRUE 57% of the time. On top of this, an effective Bounce Rate above 0 improves our TRUE to 74% and Administrative type ‘5’ or below result in a TRUE 83% of the time. Also, we see that October and December are good months for shoppers’ conversions.
+
+```{r dttrain}
+dt.pred <- predict(dt_model,test_data,type = "class")
+mean(dt.pred==test_data$Revenue)
+```
+
+Confusion Matrix for Decision Tree
+
+```{r cfdt}
+cfdt<-table(dt.pred,test_data$Revenue)
+```
+
+Accuracy measures for Decision Tree:
+
+```{r preandrecallcffscore}
+confusionMatrix(cfdt)
+```
+
+Achieved approximately 90% of accuracy in Decision Tree classification. Which is really good compared to the logistic regression as the classification techniques.
+
+### K - Means Clustering 
+
+Preparing the dataset for the K-Means Clustering Algorithm. Including the conversion of the Categorical values to numeric or factors.
+
+```{r kmeansdata}
+dataset_kmeans <- dataset
+dataset_kmeans$OperatingSystems <- factor(dataset$OperatingSystems,
+                                   order = TRUE,
+                                   levels = c(6,3,7,1,5,2,4,8))
+dataset_kmeans$Browser <- factor(dataset$Browser,
+                          order = TRUE,
+                          levels = c(9,3,6,7,1,2,8,11,4,5,10,13,12))
+dataset_kmeans$Region <- factor(dataset$Region,
+                         order = TRUE,
+                         levels = c(8,6,3,4,7,1,5,2,9))
+dataset_kmeans$TrafficType <- factor(dataset$TrafficType,
+                              order = TRUE,
+                              levels = c(12,15,17,18,13,19,3,9,1,6,4,14,11,10,5,2,20,8,7,16))
+dataset_kmeans$Month <- factor(dataset_kmeans$Month, 
+                            order = TRUE,
+                            levels = c('Jan','Feb', 'Mar','Apr', 'May',
+                                   'Jun','Jul','Aug','Sep','Oct','Nov','Dec'),
+                            labels = c(1,2,3,4,5,6,7,8,9,10,11,12))
+dataset_kmeans$VisitorType <- factor(dataset_kmeans$VisitorType, 
+                                  order = TRUE,
+                                  levels=c('Returning_Visitor', 'Other', 'New_Visitor'),
+                                  labels = c(1,2,3))
+dataset_kmeans$Weekend <- mapvalues(dataset$Weekend,
+                              from = c('TRUE','FALSE'),
+                              to = c(1,0))
+# dataset_kmeans$Revenue <- as.numeric(as.factor(dataset_kmeans$Revenue))
+dataset_kmeans$Administrative <- as.numeric(dataset_kmeans$Administrative)
+dataset_kmeans$ProductRelated <- as.numeric(dataset_kmeans$ProductRelated)
+dataset_kmeans$Informational <- as.numeric(dataset_kmeans$Informational)
+```
+
+Creating the normalizing function for the 10 variables that needs feature scaling for the better implementation of the Euclidian distance in the algorithm.
+
+```{r kmeansnormalize}
+normalize <- function(x) {
+  return((x-min(x))/ (max(x) - min(x)))
+}
+dataset_kmeans$Administrative <- normalize(dataset_kmeans$Administrative)
+dataset_kmeans$Administrative_Duration <- normalize(dataset_kmeans$Administrative_Duration)
+dataset_kmeans$Informational <- normalize(dataset_kmeans$Informational_Duration)
+dataset_kmeans$Informational_Duration <- normalize(dataset_kmeans$Administrative)
+dataset_kmeans$ProductRelated <- normalize(dataset_kmeans$ProductRelated)
+dataset_kmeans$ProductRelated_Duration <- normalize(dataset_kmeans$ProductRelated_Duration)
+dataset_kmeans$BounceRates <- normalize(dataset_kmeans$BounceRates)
+dataset_kmeans$ExitRates <- normalize(dataset_kmeans$ExitRates)
+dataset_kmeans$PageValues <- normalize(dataset_kmeans$PageValues)
+dataset_kmeans$SpecialDay <- normalize(dataset_kmeans$SpecialDay)
+```
+
+Building the K-Means model with `kmeans()` function and assigning K as 2, as we know there are only two clusters in Revenue feature that is either *True* or *False*. In other words to mention whether the customer helped to generate the revenue of not.
+
+```{r kmeansbuild}
+kmeans_clust <- kmeans(dataset_kmeans[-18], centers = 2, iter.max = 150)
+kmeans_clust$size
+```
+
+```{r kmeansacc}
+cm_km <- table(kmeans_clust$cluster, dataset_kmeans$Revenue)
+cm_km
+kmeans_accuracy = sum(diag(cm_km))/sum(cm_km)
+kmeans_precision<- cm_km[1,1]/(sum(cm_km[1,]))
+kmeans_recall<- cm_km[1,1]/(sum(cm_km[,1]))
+kmeans_fscore <- 2*kmeans_precision*kmeans_recall/(kmeans_precision+kmeans_recall)
+kmeans_accuracy
+kmeans_precision
+kmeans_recall
+kmeans_fscore
+```
+
+Compared to other classification models, the clustering is not a suitable algorithm for this dataset. The accuracy is nearly 45%, although the clusters did a good job for the *TRUE* values, but wasn't able to differentiate the *FALSE* values and failed to sort them in the group 2.
+
+```{r visuclus}
+library(cluster)
+clusplot(dataset_kmeans,
+         kmeans_clust$cluster,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste('Cluster of Revenues'))
+```
+
+\allsectionsfont{\centering}
+# Milestone 4: Core Algorithm Fine Tuning
+
+### KNN
+
+Accuracy tells us the percentage of test cases that have been correctly classified, i.e, the number of test cases among all for which we could correctly identify if the "Revenue" is positive or negative. Precision gives us the ratio of correctly positive test cases among all the positive test cases predicted by the algorithm. The sensitivity represents the ratio of the correctly predicted positive test cases among all the actually positive test cases.  Specificity represents the ratio of the correctly predicted negative test cases among all the actually negative test cases. These parameters are used as a comparison measure for various algorithms.
+
+Again, we have to prepare the data for analysis. The data preprocessing has to be done before we run any machine learning algorithm. The data preprocessing includes the preparation of the data converting from categorical data to ordinal factors. Creating Binary variables for the *Weekend* column for False as '0' and True as '1'.
+
+```{r knndata}
+dataset_knn <- dataset
+dataset_knn$OperatingSystems <- factor(dataset$OperatingSystems,
+                                   order = TRUE,
+                                   levels = c(6,3,7,1,5,2,4,8))
+dataset_knn$Browser <- factor(dataset$Browser,
+                          order = TRUE,
+                          levels = c(9,3,6,7,1,2,8,11,4,5,10,13,12))
+dataset_knn$Region <- factor(dataset$Region,
+                         order = TRUE,
+                         levels = c(8,6,3,4,7,1,5,2,9))
+dataset_knn$TrafficType <- factor(dataset$TrafficType,
+                              order = TRUE,
+                              levels = c(12,15,17,18,13,19,3,9,1,6,4,14,11,10,5,2,20,8,7,16))
+dataset_knn$Month <- factor(dataset_knn$Month, 
+                            order = TRUE,
+                            levels = c('Jan','Feb', 'Mar','Apr', 'May',
+                                   'Jun','Jul','Aug','Sep','Oct','Nov','Dec'),
+                            labels = c(1,2,3,4,5,6,7,8,9,10,11,12))
+dataset_knn$VisitorType <- factor(dataset_knn$VisitorType, 
+                                  order = TRUE,
+                                  levels=c('Returning_Visitor', 'Other', 'New_Visitor'),
+                                  labels = c(1,2,3))
+dataset_knn$Weekend <- mapvalues(dataset$Weekend,
+                              from = c('TRUE','FALSE'),
+                              to = c(1,0))
+# dataset_knn$Revenue <- as.numeric(as.factor(dataset_knn$Revenue))
+dataset_knn$Administrative <- as.numeric(dataset_knn$Administrative)
+dataset_knn$ProductRelated <- as.numeric(dataset_knn$ProductRelated)
+dataset_knn$Informational <- as.numeric(dataset_knn$Informational)
+```
+
+Splitting the data for the testing and training data in the ratio 75:25 for KNN. Moreover, feature scaling the features except the *Revenue* as we will need the factor for the prediction of the model on the dataset.
+
+```{r splitknn}
+set.seed(123)
+split_knn = createDataPartition(dataset_knn$Revenue, p=0.75, list = FALSE, times = 1)
+training_knn = dataset_knn[split_knn,]
+test_knn = dataset_knn[-split_knn,]
+preprocess_knn <- preProcess(training_knn[-18], method = c("center", "scale"))
+train_pre_knn <- predict(preprocess_knn, training_knn)
+test_pre_knn <- predict(preprocess_knn, test_knn)
+```
+
+Running the KNN algorithm from the "class" package and bulding the KNN classifier as the y_pred
+
+```{r bestkhkj}
+calc_class_err = function(actual, predicted) {
+  mean(actual != predicted)
+}
+```
+
+```{r seedknn}
+library(class)
+set.seed(24)
+k_to_try = 1:50
+err_k = rep(x = 0, times = length(k_to_try))
+for (i in seq_along(k_to_try)) {
+  k.mod = knn(train = train_pre_knn[,-18], 
+             test  = test_pre_knn[,-18], 
+             cl    = train_pre_knn[, 18], 
+             k     = k_to_try[i])
+  err_k[i] = calc_class_err(test_pre_knn[,18], k.mod)
+}
+```
+
+Plotting the error classification with the K.
+
+```{r knnplot}
+plot(err_k, type = "b", col = "red", cex = 1, pch = 20,
+     xlab = "k, number of neighbors", ylab = "Classification Error",
+     main = "(Test) Error Rate vs Neighbors")
+abline(h = min(err_k), col = "blue", lty = 3)
+abline(h = mean(test_pre_knn[,18] == "TRUE", col = "grey", lty = 3))
+```
+
+Looking up the best K value possible from the range 1 to 50. Here the best K values with less error rate are 11 and 15. We are gonna select the maximum K, as it has the least possible chance of overfitting.
+
+```{r knnbest}
+which(err_k == min(err_k))
+max(which(err_k == min(err_k)))
+```
+
+```{r normalise}
+library(class)
+y_pred = knn(train = train_pre_knn[,-18],
+             test = test_pre_knn[,-18],
+             cl = train_pre_knn[, 18],
+             k = 15,
+             prob = TRUE)
+```
+
+Building the Confusion Matrix for the K-Nearest Neighbor
+
+```{r cfknn}
+cm = table(test_knn[, 18], y_pred)
+cm
+```
+
+Precision, Recall and F-score for KNN
+
+```{r kpcknn}
+confusionMatrix(cm)
+```
+
+K-NN results in giving an accuracy of 88%. In this experiment we took K = 5, which is by far the perfect fit for the prediction.
+
+It shows that, Decision Tree algorithm performs best among these four mostly used classification, clustering, and regression algorithms in terms of accuracy. It gives us 89.65% accuracy for the used dataset. 
+Even for the specificity, K-means performs best, i.e, it is more accurate than other algorithms to predict the customers who give revenue. 
+For sensitivity, we see that Decision tree algorithm works better than others. It is because, our dataset has only 15.5% positive test cases and the relationship among the attributes for these test cases can be derived according to decision tree more accurately. 
+But, if we look at specificity, we will see Logistic Regression works better to find the customers who don’t generate revenue. 
+So, we can confidently say, Decision Tree is the best algorithm to predict the purchase intention of customers from empirical data.
+
+### Conclusion
+
+We have implemented Logistic Regression, Decision Tree, K-Means Algorithm and K-Nearest Neighbors. From these, we got nearly of 89% accuracy in the Logistic regression model. For Decision Tree, we got 90% accuracy, making it slightly better than the Regression model. For K-Means Algorithm, the accuracy is nearly 45%, it was discovered that clustering is not suitable for this dataset. Finally for K-Nearest Neighbors, the results showed an accuracy of 88%, therefore making Decision tree the best model for this dataset with an accuracy of 90%. 
+
+In the future to be able to better use Clustering models, we need more variables and observations. Apart from this, having more observations would also have enabled us to better train our model. Moreover, for the given dataset it can seen that classification techniques results better clustering techniques.
+
+To conclude, we would like to recommend more additional variables and collection of more observations so that we would be better able to analyze and predict shoppers’ intentions.
+
+
+# Appendix---Code
+
+```{r ref.label=knitr::all_labels(), echo = T, eval = F}
+```

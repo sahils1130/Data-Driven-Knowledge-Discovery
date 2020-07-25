@@ -1,0 +1,58 @@
+---
+title: "sdsdsds"
+author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+date: "7/21/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r data}
+shopper_data <- read.csv("online_shoppers_intention.csv", header = TRUE)
+```
+
+```{r p1}
+attach(shopper_data)
+shopper_data <- shopper_data %>%
+  mutate(Revenue_binary = ifelse(Revenue == "FALSE",0,1))
+```
+
+```{r part2}
+shopper_data$OperatingSystems <- factor(shopper_data$OperatingSystems, order = TRUE, levels = c(6,3,7,1,5,2,4,8))
+shopper_data$Browser <- factor(shopper_data$Browser, order = TRUE, levels = c(9,3,6,7,1,2,8,11,4,5,10,13,12))
+shopper_data$Region <- factor(shopper_data$Region, order = TRUE, levels = c(8,6,3,4,7,1,5,2,9))
+shopper_data$TrafficType <- factor(shopper_data$TrafficType, order = TRUE, levels = c(12,15,17,18,13,19,3,9,1,6,4,14,11,10,5,2,20,8,7,16))
+```
+
+```{r part23}
+library(plyr)
+shopper_data$Month <- factor(shopper_data$Month, order = TRUE, levels =c('Feb', 'Mar', 'May', 'June','Jul', 'Aug', 'Sep','Oct', 'Nov','Dec'))
+shopper_data$Month_Numeric <-mapvalues(shopper_data$Month, from = c('Feb', 'Mar', 'May', 'June','Jul', 'Aug', 'Sep','Oct', 'Nov','Dec'), to = c(1,2,3,4,5,6,7,8,9,10))
+
+
+shopper_data$VisitorType <- factor(shopper_data$VisitorType, order = TRUE, levels = c('Returning_Visitor', 'Other', 'New_Visitor'))
+shopper_data$VisitorType_Numeric <-mapvalues(shopper_data$VisitorType, from = c("Returning_Visitor", "Other", "New_Visitor"), to = c(1,2,3))
+
+library(dplyr)
+shopper_data <- shopper_data %>%
+  mutate(Weekend_binary = ifelse(Weekend == "FALSE",0,1))
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+shopper_data_norm <- shopper_data
+
+## Normalizing our 10 variables.
+shopper_data_norm$Administrative <- normalize(shopper_data$Administrative)
+shopper_data_norm$Administrative_Duration <- normalize(shopper_data$Administrative_Duration)
+shopper_data_norm$Informational <- normalize(shopper_data$Informational_Duration)
+shopper_data_norm$Informational_Duration <- normalize(shopper_data$Administrative)
+shopper_data_norm$ProductRelated <- normalize(shopper_data$ProductRelated)
+shopper_data_norm$ProductRelated_Duration <- normalize(shopper_data$ProductRelated_Duration)
+shopper_data_norm$BounceRates <- normalize(shopper_data$BounceRates)
+shopper_data_norm$ExitRates <- normalize(shopper_data$ExitRates)
+shopper_data_norm$PageValues <- normalize(shopper_data$PageValues)
+shopper_data_norm$SpecialDay <- normalize(shopper_data$SpecialDay)
+shopper_data_clust <- shopper_data_norm[-c(11,16:19)]
+```
