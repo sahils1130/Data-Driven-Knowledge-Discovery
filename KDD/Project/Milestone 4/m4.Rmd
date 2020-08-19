@@ -1,6 +1,6 @@
 ---
 title: 'Analysis of Online Shoppers’ Purchase Intention'
-author: "Kaarthik Sundaramoorthy, Sahil Shah and Vidhi Shah"
+author: "Sahil Shah"
 date: "7/20/2020"
 header-includes:
     - \usepackage{bbm}
@@ -44,7 +44,7 @@ The dataset used in the project is based on [*"online shoppers purchasing intent
 
 <!-- remove the comments to install the packages if they aren't installed -->
 
-<!-- ```{r install} -->
+<!-- # ```{r install} -->
 <!-- # install.packages("ggplot2") -->
 <!-- # install.packages("tidyverse") -->
 <!-- # install.packages("gmodels") -->
@@ -57,7 +57,7 @@ The dataset used in the project is based on [*"online shoppers purchasing intent
 <!-- # install.packages("cluster") -->
 <!-- # install.packages("fpc") -->
 <!-- # install.packages("data.table") -->
-<!-- ``` -->
+<!-- # ``` -->
 
 \allsectionsfont{\raggedright}
 ### Importing Libraries \
@@ -282,6 +282,8 @@ The building of the logistic regression model, we can see that for the dataset, 
 Now Implementing the model on the test dataset to test out the accuracy of the Logistic Model.
 
 ```{r logpred}
+# install.packages("e1071")
+library(e1071)
 log_reg_pred <- predict(log_reg, newdata = test_pre_log, type = "response")
 log_reg_pred <- ifelse(log_reg_pred>0.5,"TRUE","FALSE")
 logcf <- table(log_reg_pred, test_pre_log$Revenue)

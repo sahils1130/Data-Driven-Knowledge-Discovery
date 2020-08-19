@@ -1,0 +1,137 @@
+---
+title: "Final Exam"
+author: "Sahil Shah"
+date: "8/11/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing the Toyotta Corolla Dataset.
+
+```{r dataset}
+dataset <- read.csv("toyotaCorolla.csv")
+```
+
+## Analyzing the dataset
+
+```{r analyze}
+dim(dataset)
+head(dataset)
+str(dataset)
+```
+
+The dataset consist of 37 Variables and 1436 Observations. From the `str()` function we can analyze the variable types that can be as follows : integer, character.
+
+## Summary
+
+```{r summary}
+summary(dataset)
+```
+
+The summary of the dataset defines the statistical values including mean, median and Max. Here the Price variable is treated with Character datatype, which should be in the numeric form.
+
+```{r price}
+dataset$Price[is.na(dataset$Price)] <- mean(dataset$Price,na.rm = TRUE)
+```
+
+After removing the null or dirty values in the Price column there is still 
+Looking up the missing values and plotting it. As Price is the dependent Variable, the cleaning of the data involves the removal of outliers. 
+
+```{r scatter}
+summary(dataset$Price)
+uv <- 3*quantile(dataset$Price, 0.99)
+dataset$Price[dataset$Price>uv] <- uv
+summary(dataset$Price)
+```
+In the above chunk there were some obvious errors, so I used the capping method for Prices, which helps the removal of the outliers. After the cleaning of the column the values changes to max as 67238, and mean and median comes closer.
+
+```{r missing}
+# install.packages('DataExplorer')
+library('DataExplorer')
+plot_missing(dataset)
+sapply(dataset, function(x) sum(is.na(x)))
+which(is.na(dataset$Age_08_04))
+```
+
+As from the plot and other function we can see there is one null values present in **Age_08_04** the 798th row is null, we will add mean to the data.
+
+```{r mean}
+dataset$Age_08_04[is.na(dataset$Age_08_04)] <- mean(dataset$Age_08_04,na.rm = TRUE)
+plot_missing(dataset)
+```
+
+Now there is no missing values and no dirty values in the dataset.
+
+## Removal of Columns
+
+```{r columns}
+dataset_toyota <- dataset[c("Price", "Age_08_04", "Mfg_Month", "Mfg_Year", "KM", "Fuel_Type", "HP", "Automatic", "Doors", "Gears", "Quarterly_Tax")]
+```
+
+We are only selecting the Price, Age_08_04, Mfg_Month, Mfg_Year, KM, Fuel_Type,
+HP, Automatic, Doors, Gears and Quarterly_Tax.
+
+```{r summtoyotta}
+attach(dataset_toyota)
+summary(dataset_toyota)
+str(dataset_toyota)
+```
+
+conversion of integer data into numeric datatype.
+
+```{r conversion}
+dataset_toyota$Mfg_Month <- as.numeric(dataset_toyota$Mfg_Month)
+dataset_toyota$Mfg_Year <- as.numeric(dataset_toyota$Mfg_Year)
+dataset_toyota$KM <- as.numeric(dataset_toyota$KM)
+dataset_toyota$HP <- as.numeric(dataset_toyota$HP)
+dataset_toyota$Automatic <- as.numeric(dataset_toyota$Automatic)
+dataset_toyota$Doors <- as.numeric(dataset_toyota$Doors)
+dataset_toyota$Gears <- as.numeric(dataset_toyota$Gears)
+dataset_toyota$Quarterly_Tax <- as.numeric(dataset_toyota$Quarterly_Tax)
+plot_missing(dataset_toyota)
+```
+
+So in this preprocessed dataset there are no missing values.
+
+## Visualizations
+
+```{r plot}
+plot(dataset_toyota$Price, dataset_toyota$Age_08_04, xlab = "Prices of the Car", ylab = "Age of the Car", main = "Age vs Price")
+plot(dataset_toyota$Age_08_04,dataset_toyota$KM,xlab="Age",
+     ylab="Kilometers (in thousands)")
+```
+
+From plot of *Age vs Price* the behaviour in negative correlation, further it can be said the price of the car increases when the age decreases and vise versa. The second plot defines the Km with respect to Age of the car. As the age increases the km is also increasing.
+
+```{r vis2}
+y = log(dataset_toyota$Price)
+km = dataset_toyota$KM/1000
+par(mfrow=c(1,4))
+boxplot(y[Automatic==0],y[Automatic==1],names=c("Automatic","Not automatic"),ylab="Log Price")
+abline(h=median(y),col=2)
+boxplot(y[Doors==3],y[Doors==4],y[Doors==5],names=c("3 doors","4 doors","5 doors"),ylab="Log Price")
+abline(h=median(y),col=2)
+boxplot(y[Fuel_Type=="CNG"],y[Fuel_Type=="Diesel"],y[Fuel_Type=="Petrol"],
+names=c("CNG","Diesel","Petrol"),ylab="Log Price")
+abline(h=median(y),col=2)
+boxplot(km[Fuel_Type=="CNG"],km[Fuel_Type=="Diesel"],km[Fuel_Type=="Petrol"],
+names=c("CNG","Diesel","Petrol"),ylab="Kilometers (in thousands)")
+abline(h=median(km),col=2)
+```
+The boxplot visualizations are important to analyze the cars with the price and variables dependent on it are Automatic, Doors, and Fuel Type. The price of the Diesal cars are high compared to the Petrol and CNG. Also the price of the 5 doors cars are high.
+
+```{r vis3}
+library("ggplot2")
+mfgyear=ggplot(dataset_toyota,aes(Age_08_04,Price,
+                                   colour=Mfg_Year))+
+  geom_point()
+mfgyear
+```
+
+The trend of the graph is related to the manufacturing year of the graph, that shows the price of the car in 2004 and 2003 are high as the age of the car is less.
+
+## Algorithms
+

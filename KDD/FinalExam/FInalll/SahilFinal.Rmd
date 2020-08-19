@@ -1,0 +1,254 @@
+---
+title: "Final Exam"
+author: "Sahil Shah"
+date: "8/11/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Importing the Toyotta Corolla Dataset.
+
+```{r dataset}
+dataset <- read.csv("toyotaCorolla.csv")
+```
+
+## Analyzing the dataset
+
+```{r analyze}
+dim(dataset)
+head(dataset)
+str(dataset)
+```
+
+The dataset consist of 37 Variables and 1436 Observations. From the `str()` function we can analyze the variable types that can be as follows : integer, character.
+
+## Summary
+
+```{r summary}
+summary(dataset)
+```
+
+The summary of the dataset defines the statistical values including mean, median and Max. Here the Price variable is treated with Character datatype, which should be in the numeric form.
+
+```{r missing}
+# install.packages('DataExplorer')
+library('DataExplorer')
+plot_missing(dataset)
+sapply(dataset, function(x) sum(is.na(x)))
+which(is.na(dataset$Age_08_04))
+```
+
+As from the plot and other function we can see there is one null values present in **Age_08_04** the 798th row is null, we will add mean to the data.
+
+```{r mean}
+dataset$Age_08_04[is.na(dataset$Age_08_04)] <- mean(dataset$Age_08_04,na.rm = TRUE)
+plot_missing(dataset)
+```
+
+
+```{r price}
+dataset$Price <- as.numeric(dataset$Price)
+mean(dataset$Price,na.rm=TRUE)
+dataset$Price[is.na(dataset$Price)] <- mean(dataset$Price,na.rm = TRUE)
+```
+
+After removing the null or dirty values in the Price column there is still 
+Looking up the missing values and plotting it. As Price is the dependent Variable, the cleaning of the data involves the removal of outliers. 
+
+```{r scatter}
+summary(dataset$Price)
+uv <- 3*quantile(dataset$Price, 0.99)
+dataset$Price[dataset$Price>uv] <- uv
+summary(dataset$Price)
+```
+In the above chunk there were some obvious errors, so I used the capping method for Prices, which helps the removal of the outliers. After the cleaning of the column the values changes to max as 67238, and mean and median comes closer.
+
+Now there is no missing values and no dirty values in the dataset.
+
+## Removal of Columns
+
+```{r columns}
+dataset_toyota <- dataset[c("Price", "Age_08_04", "Mfg_Month", 
+                            "Mfg_Year", "KM", "Fuel_Type", "HP", 
+                            "Automatic", "Doors", "Gears", "Quarterly_Tax")]
+```
+
+We are only selecting the Price, Age_08_04, Mfg_Month, Mfg_Year, KM, Fuel_Type,
+HP, Automatic, Doors, Gears and Quarterly_Tax.
+
+```{r summtoyotta}
+attach(dataset_toyota)
+summary(dataset_toyota)
+str(dataset_toyota)
+```
+
+conversion of integer data into numeric datatype.
+
+```{r conversion}
+dataset_toyota$Mfg_Month <- as.numeric(dataset_toyota$Mfg_Month)
+dataset_toyota$Mfg_Year <- as.numeric(dataset_toyota$Mfg_Year)
+dataset_toyota$KM <- as.numeric(dataset_toyota$KM)
+dataset_toyota$HP <- as.numeric(dataset_toyota$HP)
+dataset_toyota$Automatic <- as.numeric(dataset_toyota$Automatic)
+dataset_toyota$Doors <- as.numeric(dataset_toyota$Doors)
+dataset_toyota$Gears <- as.numeric(dataset_toyota$Gears)
+dataset_toyota$Quarterly_Tax <- as.numeric(dataset_toyota$Quarterly_Tax)
+plot_missing(dataset_toyota)
+```
+
+So in this preprocessed dataset there are no missing values.
+
+## Visualizations
+
+```{r plot}
+plot(dataset_toyota$Price, dataset_toyota$Age_08_04,
+     xlab = "Prices of the Car", 
+     ylab = "Age of the Car", main = "Age vs Price")
+plot(dataset_toyota$Age_08_04,dataset_toyota$KM,xlab="Age",
+     ylab="Kilometers (in thousands)")
+```
+
+From plot of *Age vs Price* the behaviour in negative correlation, further it can be said the price of the car increases when the age decreases and vise versa. The second plot defines the Km with respect to Age of the car. As the age increases the km is also increasing.
+
+The boxplot visualizations are important to analyze the cars with the price and variables dependent on it are Automatic, Doors, and Fuel Type. The price of the Diesal cars are high compared to the Petrol and CNG. Also the price of the 5 doors cars are high.
+
+The trend of the graph is related to the manufacturing year of the graph, that shows the price of the car in 2004 and 2003 are high as the age of the 
+car is less.
+
+## Algorithms
+
+We will be applying regression techniques.
+1. Simple Linear Regression
+2. Multiple Linear Regression
+3. Decision Tree Regression
+
+## Simple Linear Regression
+
+```{r simpledata}
+SLR_data <- dataset_toyota[,-3:-11]
+```
+
+Now splitting the data into testing and training set, which consist of 2/3 as training and 1/3 for testing
+
+```{r slrsplit}
+library(caTools)
+set.seed(1)
+slr_split = sample.split(SLR_data$Price, SplitRatio = 2/3)
+slr_training_set = subset(SLR_data,slr_split == TRUE)
+slr_test_set = subset(SLR_data,slr_split == FALSE)
+```
+
+Now building the slr regressor with Price as the dependent variable
+
+```{r modelslr}
+slr_regressor = lm(formula = Price ~ Age_08_04,
+               data = slr_training_set)
+y_pred = predict(slr_regressor, newdata = slr_test_set)
+summary(slr_regressor)
+```
+Here the R^2 = 61.07 which not that good with respect to the SLR.
+
+```{r slracc}
+library("forecast")
+accuracy(y_pred, slr_test_set$Price)
+slr.residuals <- slr_test_set$Price[1:20] - y_pred[1:20]
+data.frame("Predicted" = y_pred[1:20], "Actual" = slr_test_set$Price[1:20], "Residual" = slr.residuals)
+```
+
+The RSME on the test set for the simple linear regression is 1657.
+The accuracy of the Simple Linear Regression is kind of low.
+Now building the plotting the graph test results.
+
+Here we can see there are some outliers, and some predicted values are
+good based on our model.
+
+## Mulitple Linear Regression
+
+We have to determine the numerical data to the Fuel_type as it contains the categorical values in the dataset.
+
+```{r mlrdata}
+mlr_data = dataset_toyota
+mlr_data$Fuel_Type = factor(mlr_data$Fuel_Type,
+                       levels = c('CNG', 'Diesal', 'Petrol'),
+                       labels = c(1, 2, 3))
+```
+
+Splitting the dataset as same as the Simple model, training as 2/3 and testing as 1/3
+
+```{r mlrmodel}
+mlr_split = sample.split(mlr_data$Price, SplitRatio = 2/3)
+mlr_training_set = subset(mlr_data, mlr_split == TRUE)
+mlr_test_set = subset(mlr_data, mlr_split == FALSE)
+
+mlr_regressor = lm(formula = Price ~ .,
+               data = mlr_training_set)
+mlr_y_pred = predict(mlr_regressor, newdata = mlr_test_set)
+summary(mlr_regressor)
+```
+
+In Multiple linear regression, most of the variables like Age, 
+Manufacturing Month, KM travelled, Horse Power and Gears are 
+significantly responsible for the Price of the car.
+
+## Decision Tree Regression 
+
+```{r regtree}
+library("rpart")
+library("rpart.plot")
+reg_tree_data <- dataset_toyota
+set.seed(12)
+reg_split = sample.split(reg_tree_data$Price, SplitRatio = 2/3)
+reg_training_set = subset(reg_tree_data, reg_split == TRUE)
+reg_test_set = subset(reg_tree_data, reg_split == FALSE)
+tr <- rpart(Price ~ ., data = reg_training_set, method = "anova",
+            minbucket = 1, maxdepth = 30, cp = 0.001)
+prp(tr)
+```
+
+```{r class}
+t(t(tr$variable.importance))
+```
+
+Here based on the decision tree vector, the Age, Mfg_Year, KM, HP 
+and Quarterly Tax are important predictors for the Price of the Car. 
+
+```{r accuracytree}
+accuracy(predict(tr, reg_training_set), reg_training_set$Price)
+accuracy(predict(tr, reg_test_set), reg_test_set$Price)
+```
+
+```{r dserror}
+train.err <-predict(tr, reg_training_set) -reg_training_set$Price
+valid.err <-predict(tr, reg_test_set) -reg_test_set$Price
+
+err <-data.frame(Error =c(train.err, valid.err), 
+                 Set =c(rep("Training", length(train.err)),
+                        rep("Testing", length(valid.err))))
+
+boxplot(Error~Set, data=err, main="RMS Errors",
+        xlab = "Set", ylab = "Error",
+        col="blueviolet",medcol="darkgoldenrod1",boxlty=0,border="black",
+        whisklty=1,staplelwd=4,outpch=13,outcex=1,outcol="darkslateblue")
+```
+The testing data has fewer errors compared to the training data as they .
+
+Will try to prune the tree using the cross-validationtion error. 
+
+```{r prune}
+tr.shallow <- rpart(Price ~ ., data = reg_training_set)
+prp(tr.shallow)
+```
+
+```{r accreg}
+accuracy(predict(tr.shallow, reg_training_set), reg_training_set$Price)
+accuracy(predict(tr.shallow, reg_test_set), reg_test_set$Price)
+```
+According to analysis pruned tree performs worse on training set(RSME = 2238.20 compared to 1110.35) for full tree. The testing set performs worse better with RSME = 1805.63 compared 5583.25. The pruned testing set performes better than pruned training set.This results into underfitting of the model
+
+## Conclusion
+
+The Question - How much should I expect to pay for a used Toyota Corolla?
+Based on the analysis of the three regression models, the best parameters buying the corolla is dependent on Age, HP, KM travelled, how many Gears they have and as the age of the car is more the price of the car will be less, also if the KM travelled is more the price of the car is less. You keep these parameters in mind while purchasing the car.
